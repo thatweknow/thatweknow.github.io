@@ -106,7 +106,7 @@ theme: hexo-theme-matery
 deploy:
   type: git
   repo: https://github.com/Bit-urd/bit-urd.github.io
-  branch: master
+  branch: gh
 
 search:
   path: search.xml
