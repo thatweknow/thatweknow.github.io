@@ -1,5 +1,5 @@
 ---
-title: Mysql知识点总结 005ca05415bc4ef18b20b3f0843fd091
+title: Mysql从入门到吊打面试官
 date: 2024-11-02 02:14:25
 top: false
 cover: false
