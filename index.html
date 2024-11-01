@@ -485,19 +485,8 @@
 
         let carouselIntervalId;
         
-        // Loop to call the next cover article picture.
-        let autoCarousel = function () {
-            carouselIntervalId = setInterval(function () {
-                coverSlider.carousel('next');
-            }, 5000);
-        };
-        autoCarousel();
-        
 
         function restartPlay() {
-            
-            clearInterval(carouselIntervalId);
-            autoCarousel();
             
         };
 
@@ -567,35 +556,213 @@
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2024/10/31/hello-world/">
+                    <a href="/2024/11/01/clickhouse-yun-wei-pian-er-duo-ji-qi-shou-dong-bu-shu-ck-ji-qun/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
+                            <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="clickhouse运维篇（二）：多机器手动部署ck集群">
                             
-                            <span class="card-title">Hello World</span>
+                            <span class="card-title">clickhouse运维篇（二）：多机器手动部署ck集群</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex
+                                
+熟悉流程并且有真正部署需求可以看一下我的另一篇简化部署的文章，因为多节点配置还是比较麻烦的先要jdk、zookeeper，再ck，还有各种配置文件登录不同机器上手动改配置文件还挺容易出错的。clickhouse运维篇（三）：生产环境一键生
                             
                         </div>
                         <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2024-10-31
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-11-01
                             </span>
                             <span class="publish-author">
                                 
-                                <i class="fas fa-user fa-fw"></i>
-                                biturd
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/common/" class="post-category">
+                                    common
+                                </a>
+                                
                                 
                             </span>
                         </div>
                     </div>
 
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/common/">
+                            <span class="chip bg-color">common</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2024/11/01/yi-golang-yuan-li-pian-cong-yuan-dai-ma-wen-jian-dao-ke-zhi-xing-wen-jian-guo-cheng-fa-sheng-liao-na-xie-shi-qing/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="一、golang原理篇---从源代码文件到可执行文件过程发生了哪些事情？">
+                            
+                            <span class="card-title">一、golang原理篇---从源代码文件到可执行文件过程发生了哪些事情？</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                主要过程：
+
+前端编译
+根据架构初始化不同的链接器Link结构体
+根据一些参数  比如，go compile后用户输入的参数初始化Link结构体里面的一些字段
+词法分析、语法分析 生成ast抽象语法树，类型检查。一些关键字转换为runtim
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-11-01
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/common/" class="post-category">
+                                    common
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/common/">
+                            <span class="chip bg-color">common</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2024/11/01/qian-ru-bu-chu-she-ji-mo-shi-1-gai-lan/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="浅入不出设计模式---1、概览">
+                            
+                            <span class="card-title">浅入不出设计模式---1、概览</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                ﻿@TOC
+1. 设计模式分类
+
+从范围上分为两类：
+类[通过对象关系建立，编译时就确定下来的] (几乎所有模式都用了继承，所以类模式只指那些集中于处理类间关系的模式)
+对象[在运行时可以变化，更具有动态性]
+
+
+从使用场景分为三类：
+创建
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-11-01
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/common/" class="post-category">
+                                    common
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/common/">
+                            <span class="chip bg-color">common</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2024/11/01/clickhouse-yun-wei-pian-san-sheng-chan-huan-jing-yi-jian-sheng-cheng-pei-zhi-bing-kuai-su-bu-shu-ck-ji-qun/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="clickhouse运维篇（三）：生产环境一键生成配置并快速部署ck集群">
+                            
+                            <span class="card-title">clickhouse运维篇（三）：生产环境一键生成配置并快速部署ck集群</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                
+
+前提条件：先了解集群搭建流程是什么样，需要改哪些配置，有哪些环境，这个文章目的是简化部署。 
+
+clickhouse运维篇（一）：docker-compose 快速部署clickhouse集群clickhouse运维篇（二）：多机器手动
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-11-01
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/common/" class="post-category">
+                                    common
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/common/">
+                            <span class="chip bg-color">common</span>
+                        </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -610,60 +777,6 @@
 
 
     <footer class="page-footer bg-color">
-    
-        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
-<style>
-    .aplayer .aplayer-lrc p {
-        
-        display: none;
-        
-        font-size: 12px;
-        font-weight: 700;
-        line-height: 16px !important;
-    }
-
-    .aplayer .aplayer-lrc p.aplayer-lrc-current {
-        
-        display: none;
-        
-        font-size: 15px;
-        color: #42b983;
-    }
-
-    
-    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
-        left: -66px !important;
-    }
-
-    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
-        left: 0px !important;
-    }
-
-    
-</style>
-<div class="">
-    
-    <div class="row">
-        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
-                   server="netease"
-                   type="playlist"
-                   id="503838841"
-                   fixed='true'
-                   autoplay='false'
-                   theme='#42b983'
-                   loop='all'
-                   order='random'
-                   preload='auto'
-                   volume='0.7'
-                   list-folded='true'
-        >
-        </meting-js>
-    </div>
-</div>
-
-<script src="/libs/aplayer/APlayer.min.js"></script>
-<script src="/libs/aplayer/Meting.min.js"></script>
-
     
 
     <div class="container row center-align"
