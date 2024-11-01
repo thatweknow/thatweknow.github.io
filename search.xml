@@ -54,33 +54,6 @@
     
     
     <entry>
-      <title>clickhouse最佳实践（一）：clickhouse千亿级日志系统单机到集群架构演进历程</title>
-      <link href="/2024/10/07/clickhouse-zui-jia-shi-jian-yi-clickhouse-qian-yi-ji-ri-zhi-xi-tong-dan-ji-dao-ji-qun-jia-gou-yan-jin-li-cheng/"/>
-      <url>/2024/10/07/clickhouse-zui-jia-shi-jian-yi-clickhouse-qian-yi-ji-ri-zhi-xi-tong-dan-ji-dao-ji-qun-jia-gou-yan-jin-li-cheng/</url>
-      
-        <content type="html"><![CDATA[<blockquote><p>最佳实践系列文章持续完善中， 记录了业务系统从碰到瓶颈到迭代的过程</p></blockquote><h2 id="1-初始阶段：单机部署"><a href="#1-初始阶段：单机部署" class="headerlink" title="1. 初始阶段：单机部署"></a>1. 初始阶段：单机部署</h2><p>针对ClickHouse（以下简称CK）单机的优化过程，通常包括以下几个方面，以确保在非分布式环境中达到最佳性能：</p><p><strong>1). 硬件优化</strong></p><ul><li><p><strong>内存</strong>：尽可能多的内存对CK有帮助，因为它能缓存查询的数据块。确保有足够的内存，尤其是当数据量较大时。</p></li><li><p><strong>磁盘</strong>：优先选择SSD，以提高数据读取和写入速度。此外，CK对文件系统的选择敏感，通常推荐选择xfs或ext4。</p></li><li><p><strong>CPU</strong>：CK对CPU多核的支持良好，多核CPU能显著提高并发查询的处理能力。</p></li></ul><p><strong>2). 配置优化  【clickhouse最佳实践（二）：clickhouse单机性能优化】</strong></p><ul><li><p><strong>max_threads</strong>：根据实际CPU核数，调整max_threads，建议设置成与CPU核心数相同或稍高的值。</p></li><li><p><strong>max_block_size</strong>：增大max_block_size的值以提高查询的吞吐量，但如果内存有限则需适量调整。</p></li><li><p><strong>max_memory_usage</strong>：针对内存进行限制，防止因数据量过大导致内存溢出。可以通过设置max_memory_usage控制单次查询的最大内存使用。</p></li><li><p><strong>max_partitions_to_read</strong>：在分区读取时，控制最大可读分区数，从而避免数据量大的查询引起卡顿或过载。</p></li></ul><p><strong>3). 数据表结构优化  【clickhouse最佳实践（二）：clickhouse单机性能优化】</strong></p><ul><li><p><strong>列式存储</strong>：确保使用列式存储（CK默认），这种存储方式在数据量大的查询中能显著提高性能。</p></li><li><p><strong>分区设计</strong>：合理设计分区键（如按时间或业务逻辑），可以有效减少扫描的数据量，提高查询效率。</p></li><li><p><strong>主键和排序键</strong>：选择合适的主键和排序键，避免全表扫描。排序键能够帮助CK加快特定字段的查询速度。</p></li><li><p><strong>物化视图（Materialized Views）</strong>：对于频繁查询的聚合结果，可以使用物化视图，减少查询时间。</p></li></ul><p><strong>4). 数据管理和清理</strong></p><ul><li><p><strong>分区管理</strong>：定期清理旧分区（如按时间分区），以减少表数据量，避免无关数据对性能的影响。</p></li><li><p><strong>数据压缩</strong>：CK支持多种压缩算法，可以使用zstd或lz4提高数据存取效率。压缩可以显著减少磁盘占用和I&#x2F;O负载。</p></li></ul><p><strong>5). 查询优化【clickhouse最佳实践（二）：clickhouse单机性能优化- - -持续完善中】</strong></p><ul><li><p><strong>查询方式优化</strong>：尽量使用预聚合数据，避免复杂的实时计算，利用条件过滤减少数据读取量。</p></li><li><p><strong>设置查询超时</strong>：避免长时间运行的查询拖垮性能，比如可以限制查询的max_execution_time。</p></li><li><p><strong>避免低效函数和操作</strong>：避免对列数据频繁使用LIKE等低效操作，可以使用匹配表达式或正则替代。</p></li></ul><p><strong>6). 监控与调试【clickhouse最佳实践（二）：clickhouse单机性能优化- - -持续完善中】</strong></p><ul><li><p><strong>系统监控</strong>：使用ClickHouse自带的系统表如system.metrics，system.events，监控查询的资源占用情况。</p></li><li><p><strong>Profile分析</strong>：通过分析查询的Profile日志，找到瓶颈点，改进查询语句和表结构设计。</p></li></ul><p>CK单机优化需要结合具体的硬件资源和业务需求，定期监控和调整系统配置以达到最佳性能。</p><h2 id="2-使用代理层"><a href="#2-使用代理层" class="headerlink" title="2. 使用代理层"></a>2. 使用代理层</h2><ul><li><strong>搭建代理层</strong>：在原有单机的基础上添加一个代理层（如: Nginx 或 CkProxy【官方的ck代理】），用于后续的负载均衡。<strong>【<a href="https://blog.csdn.net/qq_42873554/article/details/143393243">nginx负载均衡策略</a>】</strong></li><li><strong>配置代理</strong>：在代理层上配置后端节点的负载均衡策略，以便未来的集群扩展。</li></ul><h2 id="3-集群设计"><a href="#3-集群设计" class="headerlink" title="3. 集群设计"></a>3. 集群设计</h2><p><strong>【<a href="https://blog.csdn.net/qq_42873554/article/details/143368665#3_clickhouse_119">集群规划方法论</a>】</strong><br><strong>【clickhouse最佳实践（三）：Clickhouse集群模式读写方案- - -持续完善中】</strong></p><ul><li><strong>节点配置</strong>：设计多个 ClickHouse 实例，每个实例运行在独立的机器上。</li><li><strong>Shard 和 Replica</strong>：根据业务需求设计合适的分片（Shard）和复制（Replica）策略，确保数据高可用。例如，可以设置 3 个 shard，每个 shard 3 个 replica。</li><li><strong>数据分配</strong>：考虑使用 <code>Repartition</code> 或者 <code>Distributed</code> 表引擎将数据均匀分配到不同的节点。</li></ul><h2 id="4-数据迁移"><a href="#4-数据迁移" class="headerlink" title="4. 数据迁移"></a>4. 数据迁移</h2><p><strong>【clickhouse最佳实践（四）：Clickhouse单机到集群模式数据迁移- - -持续完善中】</strong></p><blockquote><p>社区的一些迁移工具：clickhouse-copier 、<em>clickhouse</em>-mysql-data-reader</p></blockquote><ul><li><strong>迁移工具</strong>：使用 ClickHouse 的复制功能（如 <code>CREATE TABLE ... AS SELECT</code>）进行数据迁移。</li><li><strong>双写策略</strong>：在过渡期间实现双写策略，确保新数据可以在新集群中被写入。</li></ul><h2 id="5-监控和维护"><a href="#5-监控和维护" class="headerlink" title="5. 监控和维护"></a>5. 监控和维护</h2><blockquote><p>[运维维度优化、1中的监控主要是业务维度优化]</p></blockquote><ul><li><strong>监控提升</strong>：逐步升级监控系统，使用 Grafana 和 Prometheus 等工具监控集群状态和性能指标。</li><li><strong>调节参数</strong>：根据监控数据对 ClickHouse 的配置参数进行调整，优化查询性能。</li></ul><h2 id="6-集群横向扩展"><a href="#6-集群横向扩展" class="headerlink" title="6.集群横向扩展"></a>6.集群横向扩展</h2><p><strong>【clickhouse最佳实践（四）：Clickhouse单机到集群模式数据迁移- - -持续完善中】</strong></p><ul><li><strong>弹性扩展</strong>：根据业务负载和数据量的变化，灵活添加或移除节点，实现弹性扩展。</li><li><strong>高可用设计</strong>：实现故障转移（Failover）机制，以增强集群的稳定性。</li></ul>]]></content>
-      
-      
-      <categories>
-          
-          <category> 后端 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 后端 </tag>
-            
-            <tag> 架构 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>一、golang原理篇---从源代码文件到可执行文件过程发生了哪些事情？.</title>
       <link href="/2024/10/07/yi-golang-yuan-li-pian-cong-yuan-dai-ma-wen-jian-dao-ke-zhi-xing-wen-jian-guo-cheng-fa-sheng-liao-na-xie-shi-qing/"/>
       <url>/2024/10/07/yi-golang-yuan-li-pian-cong-yuan-dai-ma-wen-jian-dao-ke-zhi-xing-wen-jian-guo-cheng-fa-sheng-liao-na-xie-shi-qing/</url>
@@ -102,6 +75,33 @@
             <tag> Golang </tag>
             
             <tag> 源码 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>clickhouse最佳实践（一）：clickhouse千亿级日志系统单机到集群架构演进历程</title>
+      <link href="/2024/10/07/clickhouse-zui-jia-shi-jian-yi-clickhouse-qian-yi-ji-ri-zhi-xi-tong-dan-ji-dao-ji-qun-jia-gou-yan-jin-li-cheng/"/>
+      <url>/2024/10/07/clickhouse-zui-jia-shi-jian-yi-clickhouse-qian-yi-ji-ri-zhi-xi-tong-dan-ji-dao-ji-qun-jia-gou-yan-jin-li-cheng/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>最佳实践系列文章持续完善中， 记录了业务系统从碰到瓶颈到迭代的过程</p></blockquote><h2 id="1-初始阶段：单机部署"><a href="#1-初始阶段：单机部署" class="headerlink" title="1. 初始阶段：单机部署"></a>1. 初始阶段：单机部署</h2><p>针对ClickHouse（以下简称CK）单机的优化过程，通常包括以下几个方面，以确保在非分布式环境中达到最佳性能：</p><p><strong>1). 硬件优化</strong></p><ul><li><p><strong>内存</strong>：尽可能多的内存对CK有帮助，因为它能缓存查询的数据块。确保有足够的内存，尤其是当数据量较大时。</p></li><li><p><strong>磁盘</strong>：优先选择SSD，以提高数据读取和写入速度。此外，CK对文件系统的选择敏感，通常推荐选择xfs或ext4。</p></li><li><p><strong>CPU</strong>：CK对CPU多核的支持良好，多核CPU能显著提高并发查询的处理能力。</p></li></ul><p><strong>2). 配置优化  【clickhouse最佳实践（二）：clickhouse单机性能优化】</strong></p><ul><li><p><strong>max_threads</strong>：根据实际CPU核数，调整max_threads，建议设置成与CPU核心数相同或稍高的值。</p></li><li><p><strong>max_block_size</strong>：增大max_block_size的值以提高查询的吞吐量，但如果内存有限则需适量调整。</p></li><li><p><strong>max_memory_usage</strong>：针对内存进行限制，防止因数据量过大导致内存溢出。可以通过设置max_memory_usage控制单次查询的最大内存使用。</p></li><li><p><strong>max_partitions_to_read</strong>：在分区读取时，控制最大可读分区数，从而避免数据量大的查询引起卡顿或过载。</p></li></ul><p><strong>3). 数据表结构优化  【clickhouse最佳实践（二）：clickhouse单机性能优化】</strong></p><ul><li><p><strong>列式存储</strong>：确保使用列式存储（CK默认），这种存储方式在数据量大的查询中能显著提高性能。</p></li><li><p><strong>分区设计</strong>：合理设计分区键（如按时间或业务逻辑），可以有效减少扫描的数据量，提高查询效率。</p></li><li><p><strong>主键和排序键</strong>：选择合适的主键和排序键，避免全表扫描。排序键能够帮助CK加快特定字段的查询速度。</p></li><li><p><strong>物化视图（Materialized Views）</strong>：对于频繁查询的聚合结果，可以使用物化视图，减少查询时间。</p></li></ul><p><strong>4). 数据管理和清理</strong></p><ul><li><p><strong>分区管理</strong>：定期清理旧分区（如按时间分区），以减少表数据量，避免无关数据对性能的影响。</p></li><li><p><strong>数据压缩</strong>：CK支持多种压缩算法，可以使用zstd或lz4提高数据存取效率。压缩可以显著减少磁盘占用和I&#x2F;O负载。</p></li></ul><p><strong>5). 查询优化【clickhouse最佳实践（二）：clickhouse单机性能优化- - -持续完善中】</strong></p><ul><li><p><strong>查询方式优化</strong>：尽量使用预聚合数据，避免复杂的实时计算，利用条件过滤减少数据读取量。</p></li><li><p><strong>设置查询超时</strong>：避免长时间运行的查询拖垮性能，比如可以限制查询的max_execution_time。</p></li><li><p><strong>避免低效函数和操作</strong>：避免对列数据频繁使用LIKE等低效操作，可以使用匹配表达式或正则替代。</p></li></ul><p><strong>6). 监控与调试【clickhouse最佳实践（二）：clickhouse单机性能优化- - -持续完善中】</strong></p><ul><li><p><strong>系统监控</strong>：使用ClickHouse自带的系统表如system.metrics，system.events，监控查询的资源占用情况。</p></li><li><p><strong>Profile分析</strong>：通过分析查询的Profile日志，找到瓶颈点，改进查询语句和表结构设计。</p></li></ul><p>CK单机优化需要结合具体的硬件资源和业务需求，定期监控和调整系统配置以达到最佳性能。</p><h2 id="2-使用代理层"><a href="#2-使用代理层" class="headerlink" title="2. 使用代理层"></a>2. 使用代理层</h2><ul><li><strong>搭建代理层</strong>：在原有单机的基础上添加一个代理层（如: Nginx 或 CkProxy【官方的ck代理】），用于后续的负载均衡。<strong>【<a href="https://blog.csdn.net/qq_42873554/article/details/143393243">nginx负载均衡策略</a>】</strong></li><li><strong>配置代理</strong>：在代理层上配置后端节点的负载均衡策略，以便未来的集群扩展。</li></ul><h2 id="3-集群设计"><a href="#3-集群设计" class="headerlink" title="3. 集群设计"></a>3. 集群设计</h2><p><strong>【<a href="https://blog.csdn.net/qq_42873554/article/details/143368665#3_clickhouse_119">集群规划方法论</a>】</strong><br><strong>【clickhouse最佳实践（三）：Clickhouse集群模式读写方案- - -持续完善中】</strong></p><ul><li><strong>节点配置</strong>：设计多个 ClickHouse 实例，每个实例运行在独立的机器上。</li><li><strong>Shard 和 Replica</strong>：根据业务需求设计合适的分片（Shard）和复制（Replica）策略，确保数据高可用。例如，可以设置 3 个 shard，每个 shard 3 个 replica。</li><li><strong>数据分配</strong>：考虑使用 <code>Repartition</code> 或者 <code>Distributed</code> 表引擎将数据均匀分配到不同的节点。</li></ul><h2 id="4-数据迁移"><a href="#4-数据迁移" class="headerlink" title="4. 数据迁移"></a>4. 数据迁移</h2><p><strong>【clickhouse最佳实践（四）：Clickhouse单机到集群模式数据迁移- - -持续完善中】</strong></p><blockquote><p>社区的一些迁移工具：clickhouse-copier 、<em>clickhouse</em>-mysql-data-reader</p></blockquote><ul><li><strong>迁移工具</strong>：使用 ClickHouse 的复制功能（如 <code>CREATE TABLE ... AS SELECT</code>）进行数据迁移。</li><li><strong>双写策略</strong>：在过渡期间实现双写策略，确保新数据可以在新集群中被写入。</li></ul><h2 id="5-监控和维护"><a href="#5-监控和维护" class="headerlink" title="5. 监控和维护"></a>5. 监控和维护</h2><blockquote><p>[运维维度优化、1中的监控主要是业务维度优化]</p></blockquote><ul><li><strong>监控提升</strong>：逐步升级监控系统，使用 Grafana 和 Prometheus 等工具监控集群状态和性能指标。</li><li><strong>调节参数</strong>：根据监控数据对 ClickHouse 的配置参数进行调整，优化查询性能。</li></ul><h2 id="6-集群横向扩展"><a href="#6-集群横向扩展" class="headerlink" title="6.集群横向扩展"></a>6.集群横向扩展</h2><p><strong>【clickhouse最佳实践（四）：Clickhouse单机到集群模式数据迁移- - -持续完善中】</strong></p><ul><li><strong>弹性扩展</strong>：根据业务负载和数据量的变化，灵活添加或移除节点，实现弹性扩展。</li><li><strong>高可用设计</strong>：实现故障转移（Failover）机制，以增强集群的稳定性。</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 后端 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 后端 </tag>
+            
+            <tag> 架构 </tag>
             
         </tags>
       

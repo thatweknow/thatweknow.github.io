@@ -11,7 +11,7 @@
   </url>
   
   <url>
-    <loc>https://biturd.com/2022/11/07/vim-gao-jie-bi-jiao-hao-yong-cao-zuo-ji-lu/</loc>
+    <loc>https://biturd.com/2022/09/07/wrk-ya-ce-gong-ju-shi-yong/</loc>
     
     <lastmod>2024-11-01</lastmod>
     
@@ -29,7 +29,7 @@
   </url>
   
   <url>
-    <loc>https://biturd.com/2022/01/07/qian-ru-bu-chu-she-ji-mo-shi-1-gai-lan/</loc>
+    <loc>https://biturd.com/2022/11/07/vim-gao-jie-bi-jiao-hao-yong-cao-zuo-ji-lu/</loc>
     
     <lastmod>2024-11-01</lastmod>
     
@@ -47,16 +47,7 @@
   </url>
   
   <url>
-    <loc>https://biturd.com/2022/09/07/wrk-ya-ce-gong-ju-shi-yong/</loc>
-    
-    <lastmod>2024-11-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://biturd.com/about/index.html</loc>
+    <loc>https://biturd.com/2022/01/07/qian-ru-bu-chu-she-ji-mo-shi-1-gai-lan/</loc>
     
     <lastmod>2024-11-01</lastmod>
     
@@ -92,6 +83,15 @@
   </url>
   
   <url>
+    <loc>https://biturd.com/about/index.html</loc>
+    
+    <lastmod>2024-11-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://biturd.com/2023/01/07/java-ri-zhi-kuang-jia-zong-jie-slf4j-log4j-logback/</loc>
     
     <lastmod>2024-11-01</lastmod>
@@ -101,7 +101,7 @@
   </url>
   
   <url>
-    <loc>https://biturd.com/2024/10/07/clickhouse-zui-jia-shi-jian-yi-clickhouse-qian-yi-ji-ri-zhi-xi-tong-dan-ji-dao-ji-qun-jia-gou-yan-jin-li-cheng/</loc>
+    <loc>https://biturd.com/2024/09/27/clickhouse-yun-wei-pian-yi-docker-compose-kuai-su-bu-shu-clickhouse-ji-qun/</loc>
     
     <lastmod>2024-11-01</lastmod>
     
@@ -119,7 +119,7 @@
   </url>
   
   <url>
-    <loc>https://biturd.com/2024/09/27/clickhouse-yun-wei-pian-yi-docker-compose-kuai-su-bu-shu-clickhouse-ji-qun/</loc>
+    <loc>https://biturd.com/2024/10/07/clickhouse-zui-jia-shi-jian-yi-clickhouse-qian-yi-ji-ri-zhi-xi-tong-dan-ji-dao-ji-qun-jia-gou-yan-jin-li-cheng/</loc>
     
     <lastmod>2024-11-01</lastmod>
     
@@ -155,13 +155,6 @@
 
   
   <url>
-    <loc>https://biturd.com/tags/common/</loc>
-    <lastmod>2024-11-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://biturd.com/tags/%E5%90%8E%E7%AB%AF/</loc>
     <lastmod>2024-11-01</lastmod>
     <changefreq>weekly</changefreq>
@@ -176,21 +169,21 @@
   </url>
   
   <url>
-    <loc>https://biturd.com/tags/%E6%9E%B6%E6%9E%84/</loc>
-    <lastmod>2024-11-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://biturd.com/tags/%E5%B7%A5%E5%85%B7/</loc>
-    <lastmod>2024-11-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://biturd.com/tags/%E8%BF%90%E7%BB%B4/</loc>
+    <lastmod>2024-11-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://biturd.com/tags/%E5%8E%8B%E6%B5%8B/</loc>
+    <lastmod>2024-11-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://biturd.com/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</loc>
     <lastmod>2024-11-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -211,14 +204,21 @@
   </url>
   
   <url>
-    <loc>https://biturd.com/tags/%E5%8E%8B%E6%B5%8B/</loc>
+    <loc>https://biturd.com/tags/%E6%9E%B6%E6%9E%84/</loc>
     <lastmod>2024-11-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://biturd.com/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</loc>
+    <loc>https://biturd.com/tags/%E5%B7%A5%E5%85%B7/</loc>
+    <lastmod>2024-11-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://biturd.com/tags/common/</loc>
     <lastmod>2024-11-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -227,21 +227,7 @@
 
   
   <url>
-    <loc>https://biturd.com/categories/common/</loc>
-    <lastmod>2024-11-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://biturd.com/categories/%E5%90%8E%E7%AB%AF/</loc>
-    <lastmod>2024-11-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://biturd.com/categories/%E5%B7%A5%E5%85%B7/</loc>
     <lastmod>2024-11-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -256,6 +242,20 @@
   
   <url>
     <loc>https://biturd.com/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</loc>
+    <lastmod>2024-11-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://biturd.com/categories/%E5%B7%A5%E5%85%B7/</loc>
+    <lastmod>2024-11-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://biturd.com/categories/common/</loc>
     <lastmod>2024-11-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
