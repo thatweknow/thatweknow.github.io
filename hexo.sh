@@ -1,5 +1,3 @@
-proxy
-
 if ! [ -n "$1" ]; then
     echo "Usage: sh hexo.sh [s|d] [option:src_dir/src_file]"
     exit
