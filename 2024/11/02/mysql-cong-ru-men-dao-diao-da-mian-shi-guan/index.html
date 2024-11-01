@@ -4,10 +4,12 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="wrk压测工具使用, biturd">
-    <meta name="description" content="1、wrk命令行使用Usage: wrk &amp;lt;options&amp;gt; &amp;lt;url&amp;gt;
-  Options:
-    -c, --connections &amp;lt;N&amp;gt;  Connections to keep open  &amp;">
+    <meta name="keywords" content="Mysql知识点总结 005ca05415bc4ef18b20b3f0843fd091, biturd">
+    <meta name="description" content="Mysql知识点总结1、undo、redolog
+截至目前，我们应该都熟悉了 MySQL 的执行器调用存储引擎是怎么将一条 SQL 加载到缓冲池和记录哪些日志的，流程如下：
+
+准备更新一条 SQL 语句
+MySQL（innodb）会先去缓冲">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -19,7 +21,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>wrk压测工具使用 | biturd</title>
+    <title>Mysql知识点总结 005ca05415bc4ef18b20b3f0843fd091 | biturd</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -314,12 +316,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">wrk压测工具使用</h1>
+                    <h1 class="description center-align post-title">Mysql知识点总结 005ca05415bc4ef18b20b3f0843fd091</h1>
                 </div>
             </div>
         </div>
@@ -343,12 +345,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%8E%8B%E6%B5%8B/">
-                                <span class="chip bg-color">压测</span>
-                            </a>
-                        
-                            <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">
-                                <span class="chip bg-color">性能优化</span>
+                            <a href="/tags/common/">
+                                <span class="chip bg-color">common</span>
                             </a>
                         
                     </div>
@@ -359,8 +357,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="post-category">
-                                性能优化
+                            <a href="/categories/common/" class="post-category">
+                                common
                             </a>
                         
                     </div>
@@ -372,7 +370,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-09-07
+                    2024-11-02
                 </div>
                 
 
@@ -401,85 +399,151 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="1、wrk命令行使用"><a href="#1、wrk命令行使用" class="headerlink" title="1、wrk命令行使用"></a>1、wrk命令行使用</h2><pre class="line-numbers language-none"><code class="language-none">Usage: wrk &lt;options&gt; &lt;url&gt;
-  Options:
-    -c, --connections &lt;N&gt;  Connections to keep open  &#x2F;&#x2F; 连接数量、并发数量
-    -d, --duration    &lt;T&gt;  Duration of test &#x2F;&#x2F; 持续时间
-    -t, --threads     &lt;N&gt;  Number of threads to use &#x2F;&#x2F; 线程数量
+                <h1 id="Mysql知识点总结"><a href="#Mysql知识点总结" class="headerlink" title="Mysql知识点总结"></a>Mysql知识点总结</h1><h2 id="1、undo、redolog"><a href="#1、undo、redolog" class="headerlink" title="1、undo、redolog"></a>1、undo、redolog</h2><p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241102021356_e38a567b-31eb-400e-8966-483dcdf33a97.png" alt="Untitled"></p>
+<p>截至目前，我们应该都熟悉了 MySQL 的执行器调用存储引擎是怎么将一条 SQL 加载到缓冲池和记录哪些日志的，流程如下：</p>
+<ul>
+<li>准备更新一条 SQL 语句</li>
+<li>MySQL（innodb）会先去缓冲池（BufferPool）中去查找这条数据，没找到就会去磁盘中查找，如果查找到就会将这条数据加载到缓冲池（BufferPool）中</li>
+<li>在加载到 Buffer Pool 的同时，会将这条数据的原始记录保存到 undo 日志文件中</li>
+<li>innodb 会在 Buffer Pool 中执行更新操作</li>
+<li>更新后的数据会记录在 redo log buffer 中</li>
+</ul>
+<p>上面说的步骤都是在正常情况下的操作，但是程序的设计和优化并不仅是为了这些正常情况而去做的，也是为了<strong>那些临界区和极端情况下出现的问题去优化</strong>设计的</p>
+<p>这个时候如果服务器宕机了，那么缓存中的数据还是丢失了。真烦，竟然数据总是丢失，那能不能不要放在内存中，直接保存到磁盘呢？很显然不行，因为在上面也已经介绍了，在内存中的操作目的是为了提高效率。</p>
+<p>此时，如果 MySQL 真的宕机了，那么没关系的，因为 MySQL 会认为本次事务是失败的，所以数据依旧是更新前的样子，并不会有任何的影响。</p>
+<p>好了，语句也更新好了那么需要将更新的值提交啊，也就是需要提交本次的事务了，因为只要事务成功提交了，才会将最后的变更保存到数据库，在提交事务前仍然会具有相关的其他操作</p>
+<p>将 redo Log Buffer 中的数据持久化到磁盘中，就是将 redo log buffer 中的数据写入到 redo log 磁盘文件中，一般情况下，redo log Buffer 数据写入磁盘的策略是立即刷入磁盘（具体策略情况在下面小总结出会详细介绍）,上图</p>
+<p>如果 redo log Buffer 刷入磁盘后，数据库服务器宕机了，那我们更新的数据怎么办？此时数据是在内存中，数据岂不是丢失了？不，这次数据就不会丢失了，因为 redo log buffer 中的数据已经被写入到磁盘了，已经被持久化了，就算数据库宕机了，在下次重启的时候 MySQL 也会将 redo 日志文件内容恢复到 Buffer Pool 中（这边我的理解是和 Redis 的持久化机制是差不多的，在 Redis 启动的时候会检查 rdb 或者是 aof 或者是两者都检查，根据持久化的文件来将数据恢复到内存中）</p>
+<p>到此为止，<strong>从执行器开始调用存储引擎接口做了哪些事情呢</strong>？</p>
+<ul>
+<li>准备更新一条 SQL 语句</li>
+<li>MySQL（innodb）会先去缓冲池（BufferPool）中去查找这条数据，没找到就会去磁盘中查找，如果查找到就会将这条数据加载到缓冲池（BufferPool）中</li>
+<li>在加载到 Buffer Pool 的同时，会将这条数据的原始记录保存到 undo 日志文件中</li>
+<li>innodb 会在 Buffer Pool 中执行更新操作</li>
+<li>更新后的数据会记录在 redo log buffer 中</li>
+<li>MySQL 提交事务的时候，会将 redo log buffer 中的数据写入到 redo 日志文件中 刷磁盘可以通过 innodb_flush_log_at_trx_commit 参数来设置<ul>
+<li>值为 0 表示不刷入磁盘</li>
+<li>值为 1 表示立即刷入磁盘</li>
+<li>值为 2 表示先刷到 os cache</li>
+</ul>
+</li>
+<li>myslq 重启的时候会将 redo 日志恢复到缓冲池中</li>
+</ul>
+<p>截止到目前位置，MySQL 的执行器调用存储引擎的接口去执行【执行计划】提供的 SQL 的时候 InnoDB 做了哪些事情也就基本差不多了，但是这还没完。下面还需要介绍下 MySQL 级别的日志文件 bin log。</p>
+<p>如果在数据被写入到bin log文件的时候，刚写完，数据库宕机了，数据会丢失吗？</p>
+<p>首先可以确定的是，只要redo log最后没有 commit 标记，说明本次的事务一定是失败的。但是数据是没有丢失了，因为已经被记录到redo log的磁盘文件中了。在 MySQL 重启的时候，就会将 redo log 中的数据恢复（加载）到Buffer Pool中。</p>
+<p>好了，到目前为止，一个更新操作我们基本介绍得差不多，但是你有没有感觉少了哪件事情还没有做？是不是你也发现这个时候被更新记录仅仅是在内存中执行的，哪怕是宕机又恢复了也仅仅是将更新后的记录加载到Buffer Pool中，这个时候 MySQL 数据库中的这条记录依旧是旧值，也就是说内存中的数据在我们看来依旧是脏数据，那这个时候怎么办呢？</p>
+<p>其实 MySQL 会有一个后台线程，它会在某个时机将我们Buffer Pool中的脏数据刷到 MySQL 数据库中，这样就将内存和数据库的数据保持统一了。</p>
+<h2 id="2、flush链表、free链表、lru链表"><a href="#2、flush链表、free链表、lru链表" class="headerlink" title="2、flush链表、free链表、lru链表"></a>2、flush链表、free链表、lru链表</h2><p>db刚启动的时候lru是空的，全都是free链表，然后从磁盘读取数据页加入到lru链表，如果有free链表就直接把free加入lru， 如果没有free的链表，就从lru的尾指针淘汰数据页，在冷数据区的开头处新增节点。</p>
+<p>冷数据1&#x2F;3起始处， 默认冷数据37%。  为了防止预读机制，全表扫描。把过多的热数据直接排除内存。mysql设定了一个参数innodb_old_blocks_time参数 默认1s，在1s之后访问这个缓存页才会挪动到热数据区域的链表头。</p>
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241102021402_614a6bc0-f686-4e9b-b1cd-599489b15b20.png" alt="Untitled"></p>
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241102021406_06693e63-ba91-466f-865e-5e8c439e061c.png" alt="Untitled"></p>
+<p>flush链表是管理内存中有修改的需要刷盘的脏数据。在LRU列表中的页被修改后，称该页为脏页（dirty page），即缓冲池中的页和磁盘上的页的数据产生了不一致。这时数据库会通过CHECKPOINT机制将脏页刷新回磁盘，而Flush列表中的页即为脏页列表。需要注意的是，脏页既存在于LRU列表中，也存在于Flush列表中。LRU列表用来管理缓冲池中页的可用性，Flush列表用来管理将页刷新回磁盘，二者互不影响。</p>
+<h2 id="3、binlog"><a href="#3、binlog" class="headerlink" title="3、binlog"></a>3、binlog</h2><p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241102021409_579641d5-43fe-46fd-9817-4e425022b8d3.png" alt="Untitled"></p>
+<p><code>binlog_format</code>是一个非常重要的参数，决定了记录二进制日志的格式：</p>
+<p>可选值有：</p>
+<ul>
+<li><strong>STATEMENT</strong></li>
+</ul>
+<p>记录SQL语句。日志文件小，节约IO，但是对一些系统函数不能准确复制或不能复制，如now()、uuid()等。</p>
+<p>5.7.7之前日志默认格式是STATEMENT。</p>
+<ul>
+<li><strong>ROW</strong></li>
+</ul>
+<p>记录表的行更改情况，可以为数据库的恢复、复制带来更好的可靠性，但是二进制文件的大小相较于STATEMENT会有所增加。</p>
+<p>Mysql8日志默认格式是ROW。</p>
+<p>注意:如果用canal做数据同步ROW格式是必须的</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/alibaba/canal/wiki/QuickStart">https://github.com/alibaba/canal/wiki/QuickStart</a></p>
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241102021413_da6fd823-b425-463b-8fa8-2fe3599930b7.png" alt="Untitled"></p>
+<ul>
+<li><strong>MIXED</strong></li>
+</ul>
+<p>STATEMENT和ROW模式的混合。默认采用STATEMENT格式进行二进制日志文件的记录，但是在一些情况下会使用ROW格式。</p>
+<p>业内目前推荐使用的是ROW模式，准确性高，虽然说文件大，但是现在有SSD和万兆光纤网络，这些磁盘IO和网络IO都是可以接受的。</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">show</span> <span class="token keyword">binary</span> logs <span class="token comment">--或者show master logs命令查看二进制日志的文件列表</span>
+<span class="token keyword">show</span> binlog events <span class="token operator">in</span> <span class="token string">'mysql-bin.000116'</span> <span class="token comment">-- 命令查看binlog的事件列表，我们看最新也就是最后一个binlog文件mysql-bin.000116</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-    -s, --script      &lt;S&gt;  Load Lua script file  &#x2F;&#x2F; 运行、lua脚本的位置
-    -H, --header      &lt;H&gt;  Add header to request   &#x2F;&#x2F; 添加请求头
-        --latency          Print latency statistics  &#x2F;&#x2F; 延时
-        --timeout     &lt;T&gt;  Socket&#x2F;request timeout &#x2F;&#x2F; 超时的时间
-    -v, --version          Print version details
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241102021417_15fd0bf3-e438-4550-a44e-d7a0e3606e02.png" alt="Untitled"></p>
+<h2 id="4、mysql架构"><a href="#4、mysql架构" class="headerlink" title="4、mysql架构"></a>4、mysql架构</h2><p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241102021421_7e799850-4f5c-4527-ae12-05436caf28bd.png" alt="Untitled"></p>
+<p>1、</p>
+<p>WAL的全称是Write-Ahead Logging预写日志，对于mysql就是先写日志，后写磁盘。</p>
+<p>写磁盘慢，写日志快，写完日志系统不忙的时候再写磁盘。和我们代码review的时候，会上先记录问题，会下再改代码是一个意思。 [因为可能一个事务需要修改多张表多条记录，每个记录在不同的数据页中，一次事务提交多次随机寻址 对IO的压力太大，就在内存里面提交事务，然后有个后台线程定时异步更新磁盘。][内存操作数据+Write-Ahead Log的这种思想非常普遍,  LSM树的时候，还会再次提到这个思想。在多备份一致性中，复制状态机的模型也是基于此]</p>
+<p>在InnoDB中，不光事务修改的数据库表数据是异步刷盘的，连Redo Log的写入本身也是异步的, 通过innodb_flush_log_at_trx_commit参数控制redo log刷盘的策略。</p>
+<pre class="line-numbers language-go" data-language="go"><code class="language-go"><span class="token number">0</span>：每秒刷一次磁盘，把Redo Log Buffer中的数据刷到Redo Log （默认为<span class="token number">0</span>）。
+<span class="token number">1</span>：每提交一个事务，就刷一次磁盘（这个最安全）。
+<span class="token number">2</span>：不刷盘。然后根据参数innodb_flush_log_at_timeout设置的值决定刷盘频率。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
-  Numeric arguments may include a SI unit (1k, 1M, 1G)   &#x2F;&#x2F; 数字单位
-  Time arguments may include a time unit (2s, 2m, 2h) &#x2F;&#x2F; 时间单位<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>很显然，该参数设置为0或者2都可能丢失数据。设置为1最安全，但性能最差。InnoDB设置此参数，也是为了让应用在数据安全性和性能之间做一个权衡。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u010711495/article/details/118453965">https://blog.csdn.net/u010711495/article/details/118453965</a></p>
+<p>2、</p>
+<p>CrashSafe指MySQL服务器宕机重启后，能够保证：</p>
+<p>所有已经提交的事务的数据仍然存在。</p>
+<p>所有没有提交的事务的数据自动回滚。</p>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">## 1.什么是redolog</span>
 
-<p>wrk -c 30 -d 5s -t 10 –latency –timeout 2s <a target="_blank" rel="noopener" href="http://baidu.com/">http://baidu.com</a><br>以30个连接 压测5s用10个线程  ，超时设置为2s，打印耗时分布</p>
-<pre class="line-numbers language-none"><code class="language-none">&gt; wrk -t4 -c30 -d30s --latency -s .&#x2F;wrk.lua  http:&#x2F;&#x2F;localhost:8082&#x2F;v1&#x2F;gen
-Running 30s test @ http:&#x2F;&#x2F;localhost:8082&#x2F;v1&#x2F;gen
+<span class="token comment">## 2.为什么需要redolog</span>
 
-  4 threads and 30 connections
-  Thread Stats   Avg      Stdev     Max   +&#x2F;- Stdev
-    Latency    71.19ms  223.75ms   1.89s    93.06%
-    Req&#x2F;Sec   732.64    764.31     2.43k    77.51%
-  Latency Distribution
-     50%    4.61ms
-     75%   13.88ms
-     90%  140.69ms
-     99%    1.18s 
-  36497 requests in 30.04s, 7.87MB read
-  Socket errors: connect 0, read 0, write 0, timeout 116
-Requests&#x2F;sec:   1215.05
-Transfer&#x2F;sec:    268.17KB<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment">## 3.什么是两阶段提交</span>
 
-<h2 id="2、wrk-的lua脚本编写"><a href="#2、wrk-的lua脚本编写" class="headerlink" title="2、wrk 的lua脚本编写"></a>2、wrk 的lua脚本编写</h2><p>其他的内置变量：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/paul8339/p/6283279.html">https://www.cnblogs.com/paul8339/p/6283279.html</a><br>官方示例脚本：<a target="_blank" rel="noopener" href="https://github.com/wg/wrk/tree/master/scripts">https://github.com/wg/wrk/tree/master/scripts</a></p>
-<pre class="line-numbers language-none"><code class="language-none">-- type: story-uimage,timestamp: 1666085563746, signature: VB64XLKEZ8OG1W7T:f5a440d2ceb8e8f7b6d4f1753db39c7b
--- https:&#x2F;&#x2F;www.escapelife.site&#x2F;posts&#x2F;4b014d0b.html
--- # 实现上传文件测试与json类似
--- # 同样是设置wrk.body和wrk.headers的值, 只是body较麻烦一些
---  https:&#x2F;&#x2F;www.runoob.com&#x2F;lua&#x2F;lua-basic-syntax.html
+<span class="token comment">## 4.redolog和binlog区别</span>
 
--- wrk -t8 -c10000 -d60s --latency -s .&#x2F;wrk.lua  http:&#x2F;&#x2F;localhost:8082&#x2F;v1&#x2F;s3&#x2F;url&#x2F;signature
--- go tool pprof -http :8090 http:&#x2F;&#x2F;localhost:8082&#x2F;debug&#x2F;pprof&#x2F;heap
+<span class="token comment"># 三、undolog</span>
 
--- genObject
-params &#x3D; &#123;
-    [&quot;timestamp&quot;] &#x3D; &quot;1666256428050&quot;,
-    [&quot;type&quot;]&#x3D;&quot;test-type&quot;
-&#125;
+<span class="token comment"># 四、主从复制</span>
 
+<span class="token punctuation">[</span><span class="token number">24</span>讲MySQL是怎么保证主备一致的<span class="token punctuation">.</span>html<span class="token punctuation">]</span><span class="token punctuation">(</span>http:<span class="token comment">//ydwiki.yidian-inc.com/download/attachments/109948320/24%E8%AE%B2MySQL%E6%98%AF%E6%80%8E%E4%B9%88%E4%BF%9D%E8%AF%81%E4%B8%BB%E5%A4%87%E4%B8%80%E8%87%B4%E7%9A%84.html?version=1&amp;modificationDate=1686035896000&amp;api=v2)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
--- getSignature
--- params &#x3D; &#123;
---     [&quot;timestamp&quot;] &#x3D; &quot;1666181475552&quot;,
---     [&quot;signature&quot;] &#x3D; &quot;test-signature&quot;,
--- &#125;
-
--- 1、拼装form-data
-form &#x3D; &quot;&quot;
-for key, value in pairs(params) do
-    form &#x3D; form .. &quot;------WebKitFormBoundaryX3bY6PBMcxB1vCan\r\n&quot;
-    form &#x3D; form .. &quot;Content-Disposition: form-data; name&#x3D;&quot;&quot; .. key .. &quot;&quot;\r\n\r\n&quot;
-    form &#x3D; form .. value .. &quot;\r\n&quot;
-end
-form &#x3D; form .. &quot;------WebKitFormBoundaryX3bY6PBMcxB1vCan--&quot;
-
-wrk.method &#x3D; &quot;POST&quot;
-wrk.headers[&quot;Content-Type&quot;] &#x3D; &quot;multipart&#x2F;form-data;boundary&#x3D;------WebKitFormBoundaryX3bY6PBMcxB1vCan&quot;
-wrk.body &#x3D; form
-
---curl -H &#39;BaseUrlModule: ossmanager&#39; -H &#39;Host: clotho-kr.spatio.inc&#39; -H &#39;User-Agent: okhttp&#x2F;4.8.0&#39; -H &#39;ApiName: &#x2F;ossmanager&#x2F;image&#x2F;pub&#x2F;s3&#x2F;gen&#39; -H &#39;Cookie: JSESSIONID&#x3D;&#123;ogtydvjtsdbnmevxnwu&#125;1b214bda2934cf3cb3ae15317be757bae4&#39; -H &#39;X-Spatio-Timezone: +0800&#39; -H &#39;X-Spatio-Language: zh-CN&#39; -H &#39;X-Spatio-Region: kr&#39; -H &#39;X-Spatio-Timestamp: 1666251461505&#39; -H &#39;tp: 1666251461506&#39; -H &#39;sk: 51733C934F95818E0CCDAAAB47ACD461&#39; -H &#39;once: 8fT91P&#39; -H &#39;Content-Type: application&#x2F;json&#39; --data-binary &#39;&#123;&quot;tok&quot;:&quot;Da1SR6uR7m0FZPaoHLW23O6BIqLf-lgpD2a2HXD06SXxy_bJpLGX1JsjuWqGRzDOXVpTkEMAnfLJ-LaOmREKiS76S_TBWZeJTXoiJhtCmEVhmfZBxXeE-qZqZ57ek0GblA03e8taLY4l9yQGFcRCCVi72d6BUl24pUPLkxK1TLlRRtm2owt9oe2gtNV5MA0pg4EWBwctP3hFtoDiCptJCw&quot;&#125;&#39; --compressed &#39;http:&#x2F;&#x2F;clotho-kr.spatio.inc&#x2F;ossmanager&#x2F;image&#x2F;pub&#x2F;s3&#x2F;gen?&#x3D;&amp;uv&#x3D;1.0.0&amp;net_type&#x3D;wifi&amp;uev&#x3D;1&amp;api_version&#x3D;100000&amp;distribution&#x3D;default&amp;mobile_model&#x3D;M2012K11AC&amp;pkg&#x3D;1&amp;platform&#x3D;1&amp;cv&#x3D;1.0.0.176&amp;appid&#x3D;localside&amp;uq_id&#x3D;0502e89e0323fa642d4ae8929abf1615371d&amp;request_id&#x3D;localside_MMPP10101010101000000000_1666251461505&amp;brand&#x3D;Redmi&#39;
-
-
--- 2、x-www-form
--- wrk.body &#x3D; &quot;foo&#x3D;bar&amp;baz&#x3D;quux&quot;
--- wrk.headers[&quot;Content-Type&quot;] &#x3D; &quot;application&#x2F;x-www-form-urlencoded&quot;
-
--- 3、json
--- wrk.body &#x3D; &quot;&#123;&quot;foo&quot;:&quot;bar&quot;,&quot;baz&quot;:&quot;quux&quot;&#125;&quot;
--- wrk.headers[&quot;Content-Type&quot;] &#x3D; &quot;application&#x2F;json&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><a href="Mysql%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93%20005ca05415bc4ef18b20b3f0843fd091/24%25E8%25AE%25B2MySQL%25E6%2598%25AF%25E6%2580%258E%25E4%25B9%2588%25E4%25BF%259D%25E8%25AF%2581%25E4%25B8%25BB%25E5%25A4%2587%25E4%25B8%2580%25E8%2587%25B4%25E7%259A%2584.html">24讲MySQL是怎么保证主备一致的.html</a></p>
+<h2 id="5、SQL解析器和优化器及执行"><a href="#5、SQL解析器和优化器及执行" class="headerlink" title="5、SQL解析器和优化器及执行"></a>5、<strong>SQL解析器和优化器及执行</strong></h2><p>SQL解析器、优化器和执行引擎是数据库管理系统（DBMS）中的关键组件，它们共同工作以处理和执行SQL查询。下面是这三个组件的简要说明：</p>
+<h3 id="SQL解析器（Parser）："><a href="#SQL解析器（Parser）：" class="headerlink" title="SQL解析器（Parser）："></a><strong>SQL解析器（Parser）：</strong></h3><p>SQL解析器负责将用户输入的SQL查询转换为内部数据结构，通常称为解析树或查询树。解析器执行以下主要任务：</p>
+<p>a. 语法分析：检查SQL查询是否遵循正确的语法规则。将SQL语句转换为一系列词法单元，例如关键字、标识符、运算符和常量等。</p>
+<p>SQL解析器进行词法分析的过程通常如下：</p>
+<ol>
+<li>读取SQL语句中的字符流。</li>
+<li>逐个字符地处理字符流，将其转换成一个个词法单元。</li>
+<li>识别关键字、标识符、运算符和常量等词法单元，并将它们分类。</li>
+<li>对于标识符，还需要进行一些额外的处理，例如检查是否为表名或列名等。</li>
+<li>将处理后的词法单元组成一个有序的词法单元序列，供语法分析器进一步处理。</li>
+</ol>
+<p>SQL解析器通常会使用正则表达式、有限状态自动机等技术来进行词法分析。</p>
+<p>b. 语义分析：验证查询中引用的表、列和其他对象是否存在，并检查用户是否具有执行查询所需的权限。</p>
+<p>c. 构建查询树：将SQL查询转换为内部数据结构，以便进行进一步处理。</p>
+<h3 id="SQL优化器（Optimizer）："><a href="#SQL优化器（Optimizer）：" class="headerlink" title="SQL优化器（Optimizer）："></a><strong>SQL优化器（Optimizer）：</strong></h3><p>SQL优化器负责找到执行给定查询的最有效方法，即选择最佳的执行计划。优化器考虑多种可能的执行计划，并基于成本模型、索引、表的统计信息和其他因素选择一个计划。</p>
+<p>SQL解析器进行优化器处理的过程通常如下：</p>
+<ol>
+<li>生成语法树后，优化器会对SQL语句进行分析，确定最佳的执行计划。</li>
+<li>优化器会根据查询条件、索引、表大小等因素选择最优的执行计划。</li>
+<li>优化器会尝试使用索引来加速查询，如果没有合适的索引，则会考虑创建新的索引。</li>
+<li>优化器还会考虑使用连接方式、子查询、分组、排序等技术来优化查询效率。</li>
+<li>最终，优化器会生成一个执行计划，该执行计划是一个有序的操作序列，用于执行SQL查询并返回结果。</li>
+</ol>
+<p>SQL解析器通常会使用代价估算模型、统计信息等技术来进行优化器处理。</p>
+<p>主要任务包括：</p>
+<p>a. 查询重写：对查询进行变换，以便更有效地执行。例如，消除子查询，将它们转换为连接操作。</p>
+<p>b. 选择访问路径：确定访问表和索引的最佳方法。</p>
+<p>c. 连接顺序和方法：确定连接表的顺序和使用的连接算法（如嵌套循环连接、散列连接或合并连接）。</p>
+<h3 id="SQL执行引擎（Execution-Engine）："><a href="#SQL执行引擎（Execution-Engine）：" class="headerlink" title="SQL执行引擎（Execution Engine）："></a><strong>SQL执行引擎（Execution Engine）：</strong></h3><p>SQL执行引擎是SQL查询的核心组件，它负责将解析器生成的查询计划转换为可以在计算机上执行的指令。SQL执行引擎还负责查询优化，以便在最短时间内返回结果。在执行查询时，SQL执行引擎会读取数据存储，并将结果返回给用户。</p>
+<p>SQL执行引擎负责根据优化器选择的执行计划实际执行查询。执行引擎处理以下任务：</p>
+<p>a. 执行操作：按照执行计划中的操作顺序（如扫描表、过滤行、连接表等）执行查询。</p>
+<p>b. 内存管理：分配和管理查询执行过程中所需的内存资源。</p>
+<p>c. 并发控制：协调多个并发查询之间的资源共享，确保数据的一致性和隔离性。</p>
+<p>这三个组件共同确保数据库能够高效、准确地处理和执行用户提交的SQL查询。</p>
+<p>sql（结构化查询语言）的详细执行过程，SQL是一种用于管理关系型数据库的语言。在执行SQL查询时，数据库管理系统（DBMS）会按照以下步骤进行：</p>
+<ol>
+<li><p>语法分析：DBMS会检查查询语句是否符合SQL语法规范。</p>
+</li>
+<li><p>语义分析：DBMS会检查查询语句是否符合数据库中表和列的定义，并进行必要的类型转换。</p>
+</li>
+<li><p>查询优化：DBMS会根据查询的复杂度和表之间的关系来决定最优的查询方式，以提高查询效率。</p>
+</li>
+<li><p>执行计划生成：DBMS会生成一个执行计划，该计划包括了查询的具体执行步骤，如何访问表和使用索引等。</p>
+</li>
+<li><p>执行查询：DBMS会按照执行计划中定义的步骤执行查询，并返回结果集。</p>
+</li>
+</ol>
+<p>其中，查询优化和执行计划生成是SQL执行过程中最重要的步骤之一。在查询优化中，DBMS使用各种算法和技术来确定最佳查询方式，例如索引、连接类型、排序等。在执行计划生成中，DBMS会根据查询优化的结果生成一组指令，这些指令将被用于实际执行查询。</p>
+<h2 id="6、四大特性"><a href="#6、四大特性" class="headerlink" title="6、四大特性"></a>6、四大特性</h2><h2 id="7、隔离级别"><a href="#7、隔离级别" class="headerlink" title="7、隔离级别"></a>7、隔离级别</h2><h2 id="9、NDB有空了解一下"><a href="#9、NDB有空了解一下" class="headerlink" title="9、NDB有空了解一下"></a>9、NDB有空了解一下</h2><p><a target="_blank" rel="noopener" href="https://www.notion.so/sharding-jdbc-7bf61b4aa8b64f9f89088ea631e9236b?pvs=21">sharding-jdbc</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.notion.so/mysql-20b289266bc64a128aade9489fca67a2?pvs=21">mysql事务</a></p>
 
                 
             </div>
@@ -506,7 +570,7 @@ wrk.body &#x3D; form
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://biturd.com/2022/09/07/wrk-ya-ce-gong-ju-shi-yong/">https://biturd.com/2022/09/07/wrk-ya-ce-gong-ju-shi-yong/</a>
+                    <a href="https://biturd.com/2024/11/02/mysql-cong-ru-men-dao-diao-da-mian-shi-guan/">https://biturd.com/2024/11/02/mysql-cong-ru-men-dao-diao-da-mian-shi-guan/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -544,12 +608,8 @@ wrk.body &#x3D; form
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%8E%8B%E6%B5%8B/">
-                                    <span class="chip bg-color">压测</span>
-                                </a>
-                            
-                                <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">
-                                    <span class="chip bg-color">性能优化</span>
+                                <a href="/tags/common/">
+                                    <span class="chip bg-color">common</span>
                                 </a>
                             
                         </div>
@@ -628,17 +688,18 @@ wrk.body &#x3D; form
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2022/11/07/vim-gao-jie-bi-jiao-hao-yong-cao-zuo-ji-lu/">
+                <a href="/2024/11/02/mysql-cong-ru-men-dao-diao-da-mian-shi-guan/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="vim高阶比较好用操作记录">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="Mysql知识点总结 005ca05415bc4ef18b20b3f0843fd091">
                         
-                        <span class="card-title">vim高阶比较好用操作记录</span>
+                        <span class="card-title">Mysql知识点总结 005ca05415bc4ef18b20b3f0843fd091</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -648,26 +709,27 @@ wrk.body &#x3D; form
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-11-07
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-11-02
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%B7%A5%E5%85%B7/" class="post-category">
-                                    工具
+                            <a href="/categories/common/" class="post-category">
+                                    common
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%B7%A5%E5%85%B7/">
-                        <span class="chip bg-color">工具</span>
+                    <a href="/tags/common/">
+                        <span class="chip bg-color">common</span>
                     </a>
                     
                 </div>
@@ -681,13 +743,13 @@ wrk.body &#x3D; form
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/01/07/qian-ru-bu-chu-she-ji-mo-shi-1-gai-lan/">
+                <a href="/2024/11/01/fen-bu-shi-zu-jian-yuan-li-zhi-rong-duan-xian-liu-zu-jian-shi-xian/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="浅入不出设计模式---1、概览.">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="分布式组件原理之熔断、限流组件实现">
                         
-                        <span class="card-title">浅入不出设计模式---1、概览.</span>
+                        <span class="card-title">分布式组件原理之熔断、限流组件实现</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -698,14 +760,14 @@ wrk.body &#x3D; form
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-01-07
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-11-01
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%90%8E%E7%AB%AF/" class="post-category">
-                                    后端
+                            <a href="/categories/common/" class="post-category">
+                                    common
                                 </a>
                             
                             
@@ -715,16 +777,8 @@ wrk.body &#x3D; form
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%90%8E%E7%AB%AF/">
-                        <span class="chip bg-color">后端</span>
-                    </a>
-                    
-                    <a href="/tags/Java/">
-                        <span class="chip bg-color">Java</span>
-                    </a>
-                    
-                    <a href="/tags/%E6%9E%B6%E6%9E%84/">
-                        <span class="chip bg-color">架构</span>
+                    <a href="/tags/common/">
+                        <span class="chip bg-color">common</span>
                     </a>
                     
                 </div>
