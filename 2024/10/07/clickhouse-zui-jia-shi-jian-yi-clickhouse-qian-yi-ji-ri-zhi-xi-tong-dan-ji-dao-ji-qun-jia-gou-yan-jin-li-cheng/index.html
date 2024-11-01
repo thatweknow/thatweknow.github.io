@@ -408,7 +408,7 @@
                 <blockquote>
 <p>最佳实践系列文章持续完善中， 记录了业务系统从碰到瓶颈到迭代的过程</p>
 </blockquote>
-<h1 id="1-初始阶段：单机部署"><a href="#1-初始阶段：单机部署" class="headerlink" title="1. 初始阶段：单机部署"></a>1. 初始阶段：单机部署</h1><p>针对ClickHouse（以下简称CK）单机的优化过程，通常包括以下几个方面，以确保在非分布式环境中达到最佳性能：</p>
+<h2 id="1-初始阶段：单机部署"><a href="#1-初始阶段：单机部署" class="headerlink" title="1. 初始阶段：单机部署"></a>1. 初始阶段：单机部署</h2><p>针对ClickHouse（以下简称CK）单机的优化过程，通常包括以下几个方面，以确保在非分布式环境中达到最佳性能：</p>
 <p><strong>1). 硬件优化</strong></p>
 <ul>
 <li><p><strong>内存</strong>：尽可能多的内存对CK有帮助，因为它能缓存查询的数据块。确保有足够的内存，尤其是当数据量较大时。</p>
@@ -464,17 +464,17 @@
 </li>
 </ul>
 <p>CK单机优化需要结合具体的硬件资源和业务需求，定期监控和调整系统配置以达到最佳性能。</p>
-<h1 id="2-使用代理层"><a href="#2-使用代理层" class="headerlink" title="2. 使用代理层"></a>2. 使用代理层</h1><ul>
+<h2 id="2-使用代理层"><a href="#2-使用代理层" class="headerlink" title="2. 使用代理层"></a>2. 使用代理层</h2><ul>
 <li><strong>搭建代理层</strong>：在原有单机的基础上添加一个代理层（如: Nginx 或 CkProxy【官方的ck代理】），用于后续的负载均衡。<strong>【<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42873554/article/details/143393243">nginx负载均衡策略</a>】</strong></li>
 <li><strong>配置代理</strong>：在代理层上配置后端节点的负载均衡策略，以便未来的集群扩展。</li>
 </ul>
-<h1 id="3-集群设计"><a href="#3-集群设计" class="headerlink" title="3. 集群设计"></a>3. 集群设计</h1><p><strong>【<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42873554/article/details/143368665#3_clickhouse_119">集群规划方法论</a>】</strong><br><strong>【clickhouse最佳实践（三）：Clickhouse集群模式读写方案- - -持续完善中】</strong></p>
+<h2 id="3-集群设计"><a href="#3-集群设计" class="headerlink" title="3. 集群设计"></a>3. 集群设计</h2><p><strong>【<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42873554/article/details/143368665#3_clickhouse_119">集群规划方法论</a>】</strong><br><strong>【clickhouse最佳实践（三）：Clickhouse集群模式读写方案- - -持续完善中】</strong></p>
 <ul>
 <li><strong>节点配置</strong>：设计多个 ClickHouse 实例，每个实例运行在独立的机器上。</li>
 <li><strong>Shard 和 Replica</strong>：根据业务需求设计合适的分片（Shard）和复制（Replica）策略，确保数据高可用。例如，可以设置 3 个 shard，每个 shard 3 个 replica。</li>
 <li><strong>数据分配</strong>：考虑使用 <code>Repartition</code> 或者 <code>Distributed</code> 表引擎将数据均匀分配到不同的节点。</li>
 </ul>
-<h1 id="4-数据迁移"><a href="#4-数据迁移" class="headerlink" title="4. 数据迁移"></a>4. 数据迁移</h1><p><strong>【clickhouse最佳实践（四）：Clickhouse单机到集群模式数据迁移- - -持续完善中】</strong></p>
+<h2 id="4-数据迁移"><a href="#4-数据迁移" class="headerlink" title="4. 数据迁移"></a>4. 数据迁移</h2><p><strong>【clickhouse最佳实践（四）：Clickhouse单机到集群模式数据迁移- - -持续完善中】</strong></p>
 <blockquote>
 <p>社区的一些迁移工具：clickhouse-copier 、<em>clickhouse</em>-mysql-data-reader</p>
 </blockquote>
@@ -482,14 +482,14 @@
 <li><strong>迁移工具</strong>：使用 ClickHouse 的复制功能（如 <code>CREATE TABLE ... AS SELECT</code>）进行数据迁移。</li>
 <li><strong>双写策略</strong>：在过渡期间实现双写策略，确保新数据可以在新集群中被写入。</li>
 </ul>
-<h1 id="5-监控和维护"><a href="#5-监控和维护" class="headerlink" title="5. 监控和维护"></a>5. 监控和维护</h1><blockquote>
+<h2 id="5-监控和维护"><a href="#5-监控和维护" class="headerlink" title="5. 监控和维护"></a>5. 监控和维护</h2><blockquote>
 <p>[运维维度优化、1中的监控主要是业务维度优化]</p>
 </blockquote>
 <ul>
 <li><strong>监控提升</strong>：逐步升级监控系统，使用 Grafana 和 Prometheus 等工具监控集群状态和性能指标。</li>
 <li><strong>调节参数</strong>：根据监控数据对 ClickHouse 的配置参数进行调整，优化查询性能。</li>
 </ul>
-<h1 id="6-集群横向扩展"><a href="#6-集群横向扩展" class="headerlink" title="6.集群横向扩展"></a>6.集群横向扩展</h1><p><strong>【clickhouse最佳实践（四）：Clickhouse单机到集群模式数据迁移- - -持续完善中】</strong></p>
+<h2 id="6-集群横向扩展"><a href="#6-集群横向扩展" class="headerlink" title="6.集群横向扩展"></a>6.集群横向扩展</h2><p><strong>【clickhouse最佳实践（四）：Clickhouse单机到集群模式数据迁移- - -持续完善中】</strong></p>
 <ul>
 <li><strong>弹性扩展</strong>：根据业务负载和数据量的变化，灵活添加或移除节点，实现弹性扩展。</li>
 <li><strong>高可用设计</strong>：实现故障转移（Failover）机制，以增强集群的稳定性。</li>
