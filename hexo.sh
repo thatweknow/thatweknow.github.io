@@ -1,3 +1,5 @@
+proxy
+
 if ! [ -n "$1" ]; then
     echo "Usage: sh hexo.sh [s|d] [option:src_dir/src_file]"
     exit
@@ -53,6 +55,7 @@ if [ "$param" == "d" ]; then
     hexo clean && hexo g && hexo d
 else
     hexo clean && hexo g && hexo s
+    exit
 fi
 
 git add .
