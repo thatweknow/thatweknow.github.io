@@ -1,0 +1,1825 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Java日志框架 总结 slf4j、log4j、logback, biturd">
+    <meta name="description" content="Java日志技术1.日志的概念1.1 日志文件种类
+调试日志
+系统日志
+
+2.Java日志框架2.1 为什么要使用日志框架
+软件复杂，设计的知识、内容、为题太多。
+小系统不需要使用日志框架, 使用别人的框架你就可以集中精力完成系统的业务逻辑">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>Java日志框架 总结 slf4j、log4j、logback | biturd</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/reward.css">
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">biturd</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">biturd</div>
+        <div class="logo-desc">
+            
+            Less Is More
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/18.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Java日志框架 总结 slf4j、log4j、logback</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E5%90%8E%E7%AB%AF/">
+                                <span class="chip bg-color">后端</span>
+                            </a>
+                        
+                            <a href="/tags/Java/">
+                                <span class="chip bg-color">Java</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E5%90%8E%E7%AB%AF/" class="post-category">
+                                后端
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2023-01-07
+                </div>
+                
+
+                
+
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
+
+        
+        <!-- 代码块折行 -->
+        <style type="text/css">
+            code[class*="language-"], pre[class*="language-"] { white-space: pre-wrap !important; }
+        </style>
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1 id="Java日志技术"><a href="#Java日志技术" class="headerlink" title="Java日志技术"></a>Java日志技术</h1><h2 id="1-日志的概念"><a href="#1-日志的概念" class="headerlink" title="1.日志的概念"></a>1.日志的概念</h2><h3 id="1-1-日志文件种类"><a href="#1-1-日志文件种类" class="headerlink" title="1.1 日志文件种类"></a>1.1 日志文件种类</h3><ul>
+<li>调试日志</li>
+<li>系统日志</li>
+</ul>
+<h2 id="2-Java日志框架"><a href="#2-Java日志框架" class="headerlink" title="2.Java日志框架"></a>2.Java日志框架</h2><h3 id="2-1-为什么要使用日志框架"><a href="#2-1-为什么要使用日志框架" class="headerlink" title="2.1 为什么要使用日志框架"></a>2.1 为什么要使用日志框架</h3><ol>
+<li>软件复杂，设计的知识、内容、为题太多。</li>
+<li>小系统不需要使用日志框架, 使用别人的框架你就可以集中精力完成系统的业务逻辑。</li>
+</ol>
+<h3 id="2-2-流行的日志框架-日志门面技术"><a href="#2-2-流行的日志框架-日志门面技术" class="headerlink" title="2.2 流行的日志框架[日志门面技术]"></a>2.2 流行的日志框架[日志门面技术]</h3><blockquote>
+<p>日志门面技术,就是面向接口编程。多种日志框架无缝切换。[类似JDBC]</p>
+</blockquote>
+<blockquote>
+<p>冷门：JCL是门面技术但也提供了实现，slf4j也提供了实现但是也不用。log4j是实现技术但也提供了门面API但是一般也不用 。</p>
+</blockquote>
+<h4 id="2-2-1-日志门面"><a href="#2-2-1-日志门面" class="headerlink" title="2.2.1 日志门面"></a>2.2.1 日志门面</h4><ul>
+<li>JCL、slf4j</li>
+</ul>
+<h5 id="日志门面的优点"><a href="#日志门面的优点" class="headerlink" title="日志门面的优点"></a>日志门面的优点</h5><ul>
+<li>1.面向接口编程,减少耦合 [通过导入不同的日志实现类,灵活切换框架,统一配置便于项目日志管理] </li>
+<li>2.统一的API，并隐藏了不同框架的底部的细节,隐藏了日志实现框架 的API。方便学习及使用。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184824_58ce5af4-b5eb-447b-8ee5-b5524eec433a.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-sxkplitf-1630495502298)(/Users/admin/Documents/my-note/image-old/image-20200405110730005.png)]"></p>
+<h4 id="2-2-2-日志实现"><a href="#2-2-2-日志实现" class="headerlink" title="2.2.2 日志实现"></a>2.2.2 日志实现</h4><ul>
+<li>JUL[jdk自带]、logback[spring默认]、log4j、log4j2[性能最好]</li>
+</ul>
+<h2 id="3-日志框架从入门到不想入门"><a href="#3-日志框架从入门到不想入门" class="headerlink" title="3. 日志框架从入门到不想入门"></a>3. 日志框架从入门到不想入门</h2><h3 id="3-0-所有的配置文件"><a href="#3-0-所有的配置文件" class="headerlink" title="3.0 所有的配置文件"></a>3.0 所有的配置文件</h3><h4 id="3-0-1-JUL-核心是logManager以及Logger对象代码"><a href="#3-0-1-JUL-核心是logManager以及Logger对象代码" class="headerlink" title="3.0.1 JUL [核心是logManager以及Logger对象代码]"></a>3.0.1 JUL [核心是logManager以及Logger对象代码]</h4><pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token comment">## RootLogger处理器（获取时设置）</span>
+<span class="token key attr-name">handlers</span><span class="token punctuation">=</span> <span class="token value attr-value">java.util.logging.ConsoleHandler</span>
+<span class="token comment">## RootLogger处理器（打印日志时设置）</span>
+<span class="token key attr-name">.handlers</span><span class="token punctuation">=</span> <span class="token value attr-value">RootLogger.java.util.logging.FileHandler</span>
+<span class="token comment"># RootLogger日志等级</span>
+<span class="token key attr-name">.level</span><span class="token punctuation">=</span> <span class="token value attr-value">INFO</span>
+
+<span class="token comment">## TestLog日志处理器</span>
+<span class="token key attr-name">TestLog.handlers</span><span class="token punctuation">=</span> <span class="token value attr-value">java.util.logging.FileHandler</span>
+<span class="token comment"># TestLog日志等级</span>
+<span class="token key attr-name">TestLog.level</span><span class="token punctuation">=</span> <span class="token value attr-value">INFO</span>
+<span class="token comment"># 忽略父日志处理</span>
+<span class="token key attr-name">TestLog.useParentHandlers</span><span class="token punctuation">=</span><span class="token value attr-value">false</span>
+
+<span class="token comment">## 控制台处理器</span>
+<span class="token comment"># 输出日志级别</span>
+<span class="token key attr-name">java.util.logging.ConsoleHandler.level</span> <span class="token punctuation">=</span> <span class="token value attr-value">INFO</span>
+<span class="token comment"># 输出日志格式</span>
+<span class="token key attr-name">java.util.logging.ConsoleHandler.formatter</span> <span class="token punctuation">=</span> <span class="token value attr-value">java.util.logging.SimpleFormatter</span>
+
+
+<span class="token comment">## 文件处理器</span>
+<span class="token comment"># 输出日志级别</span>
+<span class="token key attr-name">java.util.logging.FileHandler.level</span><span class="token punctuation">=</span><span class="token value attr-value">INFO</span>
+<span class="token comment"># 输出日志格式</span>
+<span class="token key attr-name">java.util.logging.FileHandler.formatter</span> <span class="token punctuation">=</span> <span class="token value attr-value">java.util.logging.SimpleFormatter</span>
+<span class="token comment"># 输出日志文件路径</span>
+<span class="token key attr-name">java.util.logging.FileHandler.pattern</span> <span class="token punctuation">=</span> <span class="token value attr-value">D:\\TestLog.log</span>
+<span class="token comment"># 输出日志文件限制大小（50000字节）</span>
+<span class="token key attr-name">java.util.logging.FileHandler.limit</span> <span class="token punctuation">=</span> <span class="token value attr-value">50000</span>
+<span class="token comment"># 输出日志文件限制个数</span>
+<span class="token key attr-name">java.util.logging.FileHandler.count</span> <span class="token punctuation">=</span> <span class="token value attr-value">10</span>
+<span class="token comment"># 输出日志文件 是否是追加</span>
+<span class="token key attr-name">java.util.logging.FileHandler.append</span><span class="token punctuation">=</span><span class="token value attr-value">true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="3-0-2-Log4j-核心是配置文件以及Appender"><a href="#3-0-2-Log4j-核心是配置文件以及Appender" class="headerlink" title="3.0.2 Log4j[核心是配置文件以及Appender]"></a>3.0.2 Log4j[核心是配置文件以及Appender]</h4><pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token key attr-name">log4j.rootLogger</span><span class="token punctuation">=</span><span class="token value attr-value">trace,console</span>
+
+<span class="token comment"># 自定义logger</span>
+<span class="token key attr-name">log4j.logger.com.biturd</span> <span class="token punctuation">=</span> <span class="token value attr-value">info, file</span>
+<span class="token comment"># 命名规范一般是包名,这个是自定义的</span>
+<span class="token comment"># 这个是继承rootLogger的 级别会覆盖,appender追加</span>
+<span class="token key attr-name">log4j.logger.org.apache</span> <span class="token punctuation">=</span> <span class="token value attr-value">error</span>
+<span class="token comment"># 日志灵活输出</span>
+
+<span class="token key attr-name">log4j.appender.console</span><span class="token punctuation">=</span><span class="token value attr-value">org.apache.log4j.ConsoleAppender</span>
+<span class="token key attr-name">log4j.appender.console.layout</span><span class="token punctuation">=</span><span class="token value attr-value">org.apache.log4j.PatternLayout</span>
+<span class="token key attr-name">log4j.appender.console.layout.conversionPattern</span> <span class="token punctuation">=</span> <span class="token value attr-value">[%p]%r %l %d&#123;yyyy-mm-dd HH:mm:ss.SSS&#125; %m %n</span>
+
+
+<span class="token key attr-name">log4j.appender.file</span> <span class="token punctuation">=</span> <span class="token value attr-value">org.apache.log4j.FileAppender</span>
+<span class="token key attr-name">log4j.appender.file.layout</span> <span class="token punctuation">=</span> <span class="token value attr-value">org.apache.log4j.PatternLayout</span>
+<span class="token key attr-name">log4j.appender.file.layout.conversionPattern</span> <span class="token punctuation">=</span> <span class="token value attr-value">[%p]%r %l %d&#123;yyyy-mm-dd HH:mm:ss.SSS&#125; %m%n</span>
+<span class="token comment">#指定日志输出的位置[ognl表达式]</span>
+<span class="token key attr-name">log4j.appender.file.file</span> <span class="token punctuation">=</span> <span class="token value attr-value">/logs/log4j.log</span>
+<span class="token key attr-name">log4j.appender.file.encoding</span> <span class="token punctuation">=</span> <span class="token value attr-value">UTF-8</span>
+
+
+<span class="token key attr-name">log4j.appender.rollingFileAppender</span> <span class="token punctuation">=</span> <span class="token value attr-value">org.apache.log4j.RollingFileAppender</span>
+<span class="token key attr-name">log4j.appender.rollingFileAppender.layout</span> <span class="token punctuation">=</span> <span class="token value attr-value">org.apache.log4j.PatternLayout</span>
+<span class="token key attr-name">log4j.appender.rollingFileAppender.layout.conversionPattern</span> <span class="token punctuation">=</span> <span class="token value attr-value">[%p]%r %l %d&#123;yyyy-mm-dd HH:mm:ss.SSS&#125; %m%n</span>
+<span class="token comment">#指定日志输出的位置[ognl表达式]</span>
+<span class="token key attr-name">log4j.appender.rollingFileAppender.file</span> <span class="token punctuation">=</span> <span class="token value attr-value">/logs/log4j.log</span>
+<span class="token key attr-name">log4j.appender.rollingFileAppender.encoding</span> <span class="token punctuation">=</span> <span class="token value attr-value">UTF-8</span>
+<span class="token key attr-name">log4j.appender.rollingFileAppender.maxFileSize</span> <span class="token punctuation">=</span> <span class="token value attr-value">1MB</span>
+<span class="token key attr-name">log4j.appender.rollingFileAppender.maxBackupIndex</span> <span class="token punctuation">=</span> <span class="token value attr-value">10</span>
+
+<span class="token key attr-name">log4j.appender.dailyRollingFileAppender</span> <span class="token punctuation">=</span> <span class="token value attr-value">org.apache.log4j.DailyRollingFileAppender</span>
+<span class="token key attr-name">log4j.appender.dailyRollingFileAppender.layout</span> <span class="token punctuation">=</span> <span class="token value attr-value">org.apache.log4j.PatternLayout</span>
+<span class="token key attr-name">log4j.appender.dailyRollingFileAppender.layout.conversionPattern</span> <span class="token punctuation">=</span> <span class="token value attr-value">[%p]%r %l %d&#123;yyyy-mm-dd HH:mm:ss.SSS&#125; %m%n</span>
+<span class="token comment">#指定日志输出的位置[ognl表达式]</span>
+<span class="token key attr-name">log4j.appender.dailyRollingFileAppender.file</span> <span class="token punctuation">=</span> <span class="token value attr-value">/logs/log4j.log</span>
+<span class="token key attr-name">log4j.appender.dailyRollingFileAppender.encoding</span> <span class="token punctuation">=</span> <span class="token value attr-value">UTF-8</span>
+<span class="token key attr-name">log4j.appender.dailyRollingFileAppender.datePattern</span> <span class="token punctuation">=</span> <span class="token value attr-value">'.'yyyy-MM-dd-HH-mm-ss</span>
+
+<span class="token key attr-name">log4j.appender.dbAppender</span> <span class="token punctuation">=</span> <span class="token value attr-value">org.apache.log4j.jdbc.JDBCAppender</span>
+<span class="token key attr-name">log4j.appender.dbAppender.layout</span> <span class="token punctuation">=</span> <span class="token value attr-value">org.apache.log4j.PatternLayout</span>
+<span class="token key attr-name">log4j.appender.dbAppender.driver</span> <span class="token punctuation">=</span> <span class="token value attr-value">com.mysql.jdbc.Driver </span>
+<span class="token key attr-name">log4j.appender.dbAppender.url</span> <span class="token punctuation">=</span> <span class="token value attr-value">jdbc:mysql:///test</span>
+<span class="token comment"># jdbc:mysql://localhost:3306/test</span>
+<span class="token key attr-name">log4j.appender.dbAppender.user</span> <span class="token punctuation">=</span> <span class="token value attr-value">root</span>
+<span class="token key attr-name">log4j.appender.dbAppender.password</span> <span class="token punctuation">=</span> <span class="token value attr-value">root</span>
+<span class="token key attr-name">log4j.appender.dbAppender.sql</span> <span class="token punctuation">=</span> <span class="token value attr-value">INSERT INTO LOGGING (log_date, log_level, location, message) VALUES ('%d&#123;ISO8601&#125;', '%-5p', '%C,%L', '%m')</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h3 id="3-1-JUL-实现框架"><a href="#3-1-JUL-实现框架" class="headerlink" title="3.1 JUL[实现框架]"></a>3.1 JUL[实现框架]</h3><pre class="line-numbers language-none"><code class="language-none">两种方法输出日志
+    logger.log(Level.INFO, &quot;msg&quot;);  &#x2F;&#x2F; 通用方法
+    logger.info(&quot;123456&quot;); &#x2F;&#x2F; 专用方法  logger.[级别](&quot;[信息]&quot;);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">组件[非具体类]调用过程
+- Application
+	- Logger
+		设置两个内容
+		1. Level
+		2. 日志消息内容
+		- Handler
+			指定输出路径[控制台、文件、网络]
+			- Layouts[Formatters] (输出前进行格式化)
+				- Filter[细粒度的日志拦截]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="日志级别控制"><a href="#日志级别控制" class="headerlink" title="日志级别控制"></a>日志级别控制</h4><blockquote>
+<p>一共七个日志级别，通过值来控制,默认只输出默认取值比Logger.INFO高的。 如果手动设置Logger的级别那么就输出比手动设置的高的级别。</p>
+</blockquote>
+<blockquote>
+<p>Maven中的dependency如果是<scope>是test写在 main目录下面就会报错[导包找不到]</p>
+</blockquote>
+<pre class="line-numbers language-Java" data-language="Java"><code class="language-Java">@Test
+public void testQuick() throws Exception&#123;
+    Logger logger &#x3D; Logger.getLogger(&quot;com.biturd.JULTest&quot;);  &#x2F;&#x2F; 每一个日志记录器都需要有一个唯一标识
+    logger.info(&quot;hello jul&quot;);
+    logger.log(Level.INFO, &quot;msg&quot;);
+
+    String name &#x3D; &quot;123456&quot;;
+    int a &#x3D; 123456;
+    logger.log(Level.INFO, &quot;用户信息: 字符串&#123;0&#125;，数字&#123;1&#125;&quot;,new Object[]&#123;name,a&#125;);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Level</span> <span class="token constant">OFF</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Level</span><span class="token punctuation">(</span><span class="token string">"OFF"</span><span class="token punctuation">,</span><span class="token class-name">Integer</span><span class="token punctuation">.</span><span class="token constant">MAX_VALUE</span><span class="token punctuation">,</span> defaultBundle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Level</span> <span class="token constant">SEVERE</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Level</span><span class="token punctuation">(</span><span class="token string">"SEVERE"</span><span class="token punctuation">,</span><span class="token number">1000</span><span class="token punctuation">,</span> defaultBundle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Level</span> <span class="token constant">WARNING</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Level</span><span class="token punctuation">(</span><span class="token string">"WARNING"</span><span class="token punctuation">,</span> <span class="token number">900</span><span class="token punctuation">,</span> defaultBundle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Level</span> <span class="token constant">INFO</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Level</span><span class="token punctuation">(</span><span class="token string">"INFO"</span><span class="token punctuation">,</span> <span class="token number">800</span><span class="token punctuation">,</span> defaultBundle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Level</span> <span class="token constant">CONFIG</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Level</span><span class="token punctuation">(</span><span class="token string">"CONFIG"</span><span class="token punctuation">,</span> <span class="token number">700</span><span class="token punctuation">,</span> defaultBundle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Level</span> <span class="token constant">FINE</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Level</span><span class="token punctuation">(</span><span class="token string">"FINE"</span><span class="token punctuation">,</span> <span class="token number">500</span><span class="token punctuation">,</span> defaultBundle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Level</span> <span class="token constant">FINER</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Level</span><span class="token punctuation">(</span><span class="token string">"FINER"</span><span class="token punctuation">,</span> <span class="token number">400</span><span class="token punctuation">,</span> defaultBundle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Level</span> <span class="token constant">FINEST</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Level</span><span class="token punctuation">(</span><span class="token string">"FINEST"</span><span class="token punctuation">,</span> <span class="token number">300</span><span class="token punctuation">,</span> defaultBundle<span class="token punctuation">)</span><span class="token punctuation">;</span>	
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Level</span> <span class="token constant">ALL</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Level</span><span class="token punctuation">(</span><span class="token string">"ALL"</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span><span class="token constant">MIN_VALUE</span><span class="token punctuation">,</span> defaultBundle<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Test</span>   
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testLogLevel</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span><span class="token punctuation">&#123;</span>
+    <span class="token class-name">Logger</span> logger <span class="token operator">=</span> <span class="token class-name">Logger</span><span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span><span class="token string">"com.biturd.JULTest"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 每一个日志记录器都需要有一个唯一标识 通常是全限定类名</span>
+    logger<span class="token punctuation">.</span><span class="token function">severe</span><span class="token punctuation">(</span><span class="token string">"server"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    logger<span class="token punctuation">.</span><span class="token function">warning</span><span class="token punctuation">(</span><span class="token string">"warning"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    logger<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"info"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    logger<span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token string">"config"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    logger<span class="token punctuation">.</span><span class="token function">fine</span><span class="token punctuation">(</span><span class="token string">"fine"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    logger<span class="token punctuation">.</span><span class="token function">finer</span><span class="token punctuation">(</span><span class="token string">"finer"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    logger<span class="token punctuation">.</span><span class="token function">finest</span><span class="token punctuation">(</span><span class="token string">"finest"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184828_b3b73e21-d4a8-44fe-be10-6029b9e1e319.png" alt="在这里插入图片描述"></p>
+<h4 id="底层的原理及自定义配置文件"><a href="#底层的原理及自定义配置文件" class="headerlink" title="底层的原理及自定义配置文件"></a>底层的原理及自定义配置文件</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token operator">-</span> logger
+	<span class="token operator">-</span> demandLogger
+		<span class="token operator">-</span> <span class="token class-name">LogManager</span><span class="token punctuation">.</span><span class="token function">getLogManager</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+			<span class="token operator">-</span><span class="token function">ensureLogManagerInitialized</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">[</span>加载配置文件<span class="token punctuation">]</span>            
+            	<span class="token operator">-</span> readConfiguration
+  
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">readConfiguration</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span><span class="token punctuation">,</span> <span class="token class-name">SecurityException</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">checkPermission</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// if a configuration class is specified, load it and use it.</span>
+        <span class="token class-name">String</span> cname <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">getProperty</span><span class="token punctuation">(</span><span class="token string">"java.util.logging.config.class"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>cname <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+                <span class="token comment">// Instantiate the named class.  It is its constructor's</span>
+                <span class="token comment">// responsibility to initialize the logging configuration, by</span>
+                <span class="token comment">// calling readConfiguration(InputStream) with a suitable stream.</span>
+                <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+                    <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> clz <span class="token operator">=</span> <span class="token class-name">ClassLoader</span><span class="token punctuation">.</span><span class="token function">getSystemClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">loadClass</span><span class="token punctuation">(</span>cname<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    clz<span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token keyword">return</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">ClassNotFoundException</span> ex<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> clz <span class="token operator">=</span> <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getContextClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">loadClass</span><span class="token punctuation">(</span>cname<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    clz<span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token keyword">return</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> ex<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token class-name">System</span><span class="token punctuation">.</span>err<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Logging configuration class \""</span> <span class="token operator">+</span> cname <span class="token operator">+</span> <span class="token string">"\" failed"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token class-name">System</span><span class="token punctuation">.</span>err<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">""</span> <span class="token operator">+</span> ex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment">// keep going and useful config file.</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token class-name">String</span> fname <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">getProperty</span><span class="token punctuation">(</span><span class="token string">"java.util.logging.config.file"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>fname <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            fname <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">getProperty</span><span class="token punctuation">(</span><span class="token string">"java.home"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>fname <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">"Can't find java.home ??"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token class-name">File</span> f <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>fname<span class="token punctuation">,</span> <span class="token string">"lib"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            f <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>f<span class="token punctuation">,</span> <span class="token string">"logging.properties"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            fname <span class="token operator">=</span> f<span class="token punctuation">.</span><span class="token function">getCanonicalPath</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">InputStream</span> in <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span>fname<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">final</span> <span class="token class-name">BufferedInputStream</span> bin <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedInputStream</span><span class="token punctuation">(</span>in<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">readConfiguration</span><span class="token punctuation">(</span>bin<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    
+ <span class="token class-name">E</span><span class="token operator">:</span>\<span class="token class-name">Java</span>\jre\lib\logging<span class="token punctuation">.</span>properties   
+ 
+ logManager是单例对象<span class="token punctuation">,</span>所以前面后面所有的都是一个对象
+ 加载流肯定应用了。    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">  <span class="token annotation punctuation">@Test</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testLogProperties</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span><span class="token punctuation">&#123;</span>
+      <span class="token comment">// 加载配置文件</span>
+      <span class="token class-name">InputStream</span> ins <span class="token operator">=</span>  <span class="token class-name">JULTest</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getResourceAsStream</span><span class="token punctuation">(</span><span class="token string">"logging.properties"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token comment">// 创建logManager</span>
+      <span class="token class-name">LogManager</span> logManager <span class="token operator">=</span> <span class="token class-name">LogManager</span><span class="token punctuation">.</span><span class="token function">getLogManager</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token comment">// 通过logManager加载配置文件</span>
+
+logManager<span class="token punctuation">.</span><span class="token function">readConfiguration</span><span class="token punctuation">(</span>ins<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token class-name">Logger</span> logger <span class="token operator">=</span> <span class="token class-name">Logger</span><span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span><span class="token string">"com.biturd"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      
+      logger<span class="token punctuation">.</span><span class="token function">severe</span><span class="token punctuation">(</span><span class="token string">"server"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      logger<span class="token punctuation">.</span><span class="token function">warning</span><span class="token punctuation">(</span><span class="token string">"warning"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      logger<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"info"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      logger<span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token string">"config"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      logger<span class="token punctuation">.</span><span class="token function">fine</span><span class="token punctuation">(</span><span class="token string">"fine"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      logger<span class="token punctuation">.</span><span class="token function">finer</span><span class="token punctuation">(</span><span class="token string">"finer"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      logger<span class="token punctuation">.</span><span class="token function">finest</span><span class="token punctuation">(</span><span class="token string">"finest"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="配置文件总览"><a href="#配置文件总览" class="headerlink" title="配置文件总览"></a>配置文件总览</h4><pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token comment">## RootLogger处理器（获取时设置）</span>
+<span class="token key attr-name">handlers</span><span class="token punctuation">=</span> <span class="token value attr-value">java.util.logging.ConsoleHandler</span>
+<span class="token comment">## RootLogger处理器（打印日志时设置）</span>
+<span class="token key attr-name">.handlers</span><span class="token punctuation">=</span> <span class="token value attr-value">RootLogger.java.util.logging.FileHandler</span>
+<span class="token comment"># RootLogger日志等级</span>
+<span class="token key attr-name">.level</span><span class="token punctuation">=</span> <span class="token value attr-value">INFO</span>
+
+<span class="token comment">## TestLog日志处理器</span>
+<span class="token key attr-name">TestLog.handlers</span><span class="token punctuation">=</span> <span class="token value attr-value">java.util.logging.FileHandler</span>
+<span class="token comment"># TestLog日志等级</span>
+<span class="token key attr-name">TestLog.level</span><span class="token punctuation">=</span> <span class="token value attr-value">INFO</span>
+<span class="token comment"># 忽略父日志处理</span>
+<span class="token key attr-name">TestLog.useParentHandlers</span><span class="token punctuation">=</span><span class="token value attr-value">false</span>
+
+<span class="token comment">## 控制台处理器</span>
+<span class="token comment"># 输出日志级别</span>
+<span class="token key attr-name">java.util.logging.ConsoleHandler.level</span> <span class="token punctuation">=</span> <span class="token value attr-value">INFO</span>
+<span class="token comment"># 输出日志格式</span>
+<span class="token key attr-name">java.util.logging.ConsoleHandler.formatter</span> <span class="token punctuation">=</span> <span class="token value attr-value">java.util.logging.SimpleFormatter</span>
+
+
+<span class="token comment">## 文件处理器</span>
+<span class="token comment"># 输出日志级别</span>
+<span class="token key attr-name">java.util.logging.FileHandler.level</span><span class="token punctuation">=</span><span class="token value attr-value">INFO</span>
+<span class="token comment"># 输出日志格式</span>
+<span class="token key attr-name">java.util.logging.FileHandler.formatter</span> <span class="token punctuation">=</span> <span class="token value attr-value">java.util.logging.SimpleFormatter</span>
+<span class="token comment"># 输出日志文件路径</span>
+<span class="token key attr-name">java.util.logging.FileHandler.pattern</span> <span class="token punctuation">=</span> <span class="token value attr-value">D:\\TestLog.log</span>
+<span class="token comment"># 输出日志文件限制大小（50000字节）</span>
+<span class="token key attr-name">java.util.logging.FileHandler.limit</span> <span class="token punctuation">=</span> <span class="token value attr-value">50000</span>
+<span class="token comment"># 输出日志文件限制个数</span>
+<span class="token key attr-name">java.util.logging.FileHandler.count</span> <span class="token punctuation">=</span> <span class="token value attr-value">10</span>
+<span class="token comment"># 输出日志文件 是否是追加</span>
+<span class="token key attr-name">java.util.logging.FileHandler.append</span><span class="token punctuation">=</span><span class="token value attr-value">true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="3-2-Log4j-实现框架"><a href="#3-2-Log4j-实现框架" class="headerlink" title="3.2 Log4j[实现框架]"></a>3.2 Log4j[实现框架]</h3><h4 id="0-代码示例"><a href="#0-代码示例" class="headerlink" title="0.代码示例"></a>0.代码示例</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java">    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token class-name">QuickStartLog4j</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token comment">// 不使用配置文件 用默认的方式</span>
+<span class="token comment">//        BasicConfigurator.configure();</span>
+        <span class="token comment">// 获取日志记录器对象</span>
+        <span class="token class-name">Logger</span> logger <span class="token operator">=</span> <span class="token class-name">Logger</span><span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span>log4jTest<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 日志记录输出</span>
+        logger<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"hello log4j"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        logger<span class="token punctuation">.</span><span class="token function">fatal</span><span class="token punctuation">(</span><span class="token string">"造成系统崩溃的严重错误"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>   
+        <span class="token comment">// 常用的</span>
+        logger<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"不会让系统停止的错误信息"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        logger<span class="token punctuation">.</span><span class="token function">warn</span><span class="token punctuation">(</span><span class="token string">"可能发生错误警告信息"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        logger<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"运行信息,数据连接、网络连接、IO、操作等"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        logger<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"调试信息,一般在开发中使用,记录程序变量参数传递信息等"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        logger<span class="token punctuation">.</span><span class="token function">trace</span><span class="token punctuation">(</span><span class="token string">"追踪信息,记录程序所有的流程信息"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h4 id="1-Log4j组件"><a href="#1-Log4j组件" class="headerlink" title="1.Log4j组件"></a>1.Log4j组件</h4><ul>
+<li>Loggers [日志记录器] 控制日志的输出级别与日志是否输出</li>
+<li>Appenders [输出端] 日志的输出方式</li>
+<li>Layout [日志格式化] 控制日志的输出格式</li>
+</ul>
+<h5 id="1-Loggers日志记录器-默认继承RootLogger"><a href="#1-Loggers日志记录器-默认继承RootLogger" class="headerlink" title="1). Loggers日志记录器 [默认继承RootLogger]"></a>1). Loggers日志记录器 [默认继承RootLogger]</h5><blockquote>
+<p>早期叫Category,所以可以视为是Category类的别名</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184830_d6570cbd-4f9a-4625-b602-e5cdf9bfef89.png" alt="在这里插入图片描述"></p>
+<h5 id="2-Appenders"><a href="#2-Appenders" class="headerlink" title="2). Appenders"></a>2). Appenders</h5><p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184833_4b0966a2-f5e1-483f-90de-36b65b291a26.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-d4FKTTiH-1630495502308)(/Users/admin/Documents/my-note/image-old/image-20200403092804928.png)]"></p>
+<h5 id="3-Layouts"><a href="#3-Layouts" class="headerlink" title="3). Layouts"></a>3). Layouts</h5><p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184837_22a62715-51e1-4cb0-bed0-f81b1e981c8c.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-NuWbtfpo-1630495502310)(/Users/admin/Documents/my-note/image-old/image-20200403093159621.png)]"></p>
+<h4 id="2-源码分析"><a href="#2-源码分析" class="headerlink" title="2. 源码分析"></a>2. 源码分析</h4><pre class="line-numbers language-none"><code class="language-none">- org.apache.log4j.logger
+	- org.apache.log4j.logManager [读取配置信息]
+	- 在Loader.getResource();读取配置文件
+	- OptionConverter.selectAndConfigure();加载配置文件内部信息
+		- 然后把配置信息都加到rootLogger上
+		- configureRootCategory()
+		- parseCategory()
+			- parseCategory()解析信息 [StringTokenizer st &#x3D; new StringTokenizer(value, &quot;,&quot;);]
+	<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184840_9bca110d-a9d8-4e67-b321-942b469bd712.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-UCENH4ER-1630495502311)(/Users/admin/Documents/my-note/image-old/image-20200403115422584.png)]"></p>
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184843_b593bbbf-3545-4c7f-a6a5-dc96bd48100c.png" alt="在这里插入图片描述"></p>
+<blockquote>
+<p> &#x3D;&#x3D;不知道配置文件写什么就在这查&#x3D;&#x3D;。&lt;&lt;学习框架方法论&gt;&gt;</p>
+</blockquote>
+<blockquote>
+<p>除了这里还有就是ognl表达式 set方法</p>
+</blockquote>
+<h4 id="3-其他"><a href="#3-其他" class="headerlink" title="3.其他"></a>3.其他</h4><h5 id="3-1-Loglog-Log4j内置的日志的开关"><a href="#3-1-Loglog-Log4j内置的日志的开关" class="headerlink" title="3.1 Loglog: Log4j内置的日志的开关"></a>3.1 Loglog: Log4j内置的日志的开关</h5><p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184846_cc28390f-dd16-4c81-ac1f-74cb0128a71d.png" alt="在这里插入图片描述"></p>
+<h5 id="3-2-Layout的使用"><a href="#3-2-Layout的使用" class="headerlink" title="3.2 Layout的使用"></a>3.2 Layout的使用</h5><p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184849_055bed73-b105-4af2-8db3-10caaa8cc394.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-uUPANV7w-1630495502319)(/Users/admin/Documents/my-note/image-old/image-20200404204902538.png)]"></p>
+<p>通过ognl表达式来指定。</p>
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token key attr-name">log4j.rootLogger</span><span class="token punctuation">=</span><span class="token value attr-value">trace,console</span>
+<span class="token key attr-name">log4j.appender.console</span><span class="token punctuation">=</span><span class="token value attr-value">org.apache.log4j.ConsoleAppender</span>
+<span class="token key attr-name">log4j.appender.console.layout</span><span class="token punctuation">=</span><span class="token value attr-value">org.apache.log4j.PatternLayout</span>
+
+<span class="token key attr-name">log4j.appender.console.layout.conversionPattern</span> <span class="token punctuation">=</span> <span class="token value attr-value">[%p]%r %l %d&#123;yyyy-mm-dd HH:mm:ss.SSS&#125; %m%n</span>
+
+<span class="token comment"># %l == %c+%t+%F+%L</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184851_62313913-ff17-4101-b0ae-1b8a3db61cf1.png" alt="在这里插入图片描述"></p>
+<h5 id="3-3-Appender的使用"><a href="#3-3-Appender的使用" class="headerlink" title="3.3 Appender的使用"></a>3.3 Appender的使用</h5><p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184856_6fee5906-6525-4889-bfe3-d1c34e348015.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>Console</li>
+<li>File[两个子类,可以选择用父类或子类]<ul>
+<li>Rolling [按大小拆分]</li>
+<li>DailyRolling [按时间拆分]</li>
+</ul>
+</li>
+</ul>
+<h6 id="3-3-1-File"><a href="#3-3-1-File" class="headerlink" title="3.3.1 File"></a>3.3.1 File</h6><blockquote>
+<p>需要指定一个输出文件</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184859_f4ed1354-a630-41fa-8db9-cdb2f4658f74.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-9LBENhsf-1630495502325)(/Users/admin/Documents/my-note/image-old/image-20200404210001421.png)]"></p>
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token key attr-name">log4j.appender.file</span> <span class="token punctuation">=</span> <span class="token value attr-value">org.apache.log4j.FileAppender</span>
+<span class="token key attr-name">log4j.appender.file.layout</span> <span class="token punctuation">=</span> <span class="token value attr-value">org.apache.log4j.PatternLayout</span>
+<span class="token key attr-name">log4j.appender.file.layout.conversionPattern</span> <span class="token punctuation">=</span> <span class="token value attr-value">[%p]%r %l %d&#123;yyyy-mm-dd HH:mm:ss.SSS&#125; %m%n</span>
+<span class="token comment">#指定日志输出的位置[ognl表达式]</span>
+<span class="token key attr-name">log4j.appender.file.file</span> <span class="token punctuation">=</span> <span class="token value attr-value">/logs/log4j.log</span>
+<span class="token key attr-name">log4j.appender.file.encoding</span> <span class="token punctuation">=</span> <span class="token value attr-value">UTF-8</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h6 id="3-3-2-Rolling"><a href="#3-3-2-Rolling" class="headerlink" title="3.3.2 Rolling"></a>3.3.2 Rolling</h6><pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token key attr-name">log4j.appender.rollingFileAppender</span> <span class="token punctuation">=</span> <span class="token value attr-value">org.apache.log4j.RollingFileAppender</span>
+<span class="token key attr-name">log4j.appender.rollingFileAppender.layout</span> <span class="token punctuation">=</span> <span class="token value attr-value">org.apache.log4j.PatternLayout</span>
+<span class="token key attr-name">log4j.appender.rollingFileAppender.layout.conversionPattern</span> <span class="token punctuation">=</span> <span class="token value attr-value">[%p]%r %l %d&#123;yyyy-mm-dd HH:mm:ss.SSS&#125; %m%n</span>
+<span class="token comment">#指定日志输出的位置[ognl表达式]</span>
+<span class="token key attr-name">log4j.appender.rollingFileAppender.file</span> <span class="token punctuation">=</span> <span class="token value attr-value">/logs/log4j.log</span>
+<span class="token key attr-name">log4j.appender.rollingFileAppender.encoding</span> <span class="token punctuation">=</span> <span class="token value attr-value">UTF-8</span>
+<span class="token key attr-name">log4j.appender.rollingFileAppender.maxFileSize</span> <span class="token punctuation">=</span> <span class="token value attr-value">1MB</span>
+<span class="token key attr-name">log4j.appender.rollingFileAppender.maxBackupIndex</span> <span class="token punctuation">=</span> <span class="token value attr-value">10  </span>
+<span class="token comment"># [超过十个会覆盖久远的日志]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h6 id="3-3-3-DailyRolling"><a href="#3-3-3-DailyRolling" class="headerlink" title="3.3.3 DailyRolling"></a>3.3.3 DailyRolling</h6><pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token key attr-name">log4j.appender.dailyRollingFileAppender</span> <span class="token punctuation">=</span> <span class="token value attr-value">org.apache.log4j.DailyRollingFileAppender</span>
+<span class="token key attr-name">log4j.appender.dailyRollingFileAppender.layout</span> <span class="token punctuation">=</span> <span class="token value attr-value">org.apache.log4j.PatternLayout</span>
+<span class="token key attr-name">log4j.appender.dailyRollingFileAppender.layout.conversionPattern</span> <span class="token punctuation">=</span> <span class="token value attr-value">[%p]%r %l %d&#123;yyyy-mm-dd HH:mm:ss.SSS&#125; %m%n</span>
+<span class="token comment">#指定日志输出的位置[ognl表达式]</span>
+<span class="token key attr-name">log4j.appender.dailyRollingFileAppender.file</span> <span class="token punctuation">=</span> <span class="token value attr-value">/logs/log4j.log</span>
+<span class="token key attr-name">log4j.appender.dailyRollingFileAppender.encoding</span> <span class="token punctuation">=</span> <span class="token value attr-value">UTF-8</span>
+<span class="token key attr-name">log4j.appender.dailyRollingFileAppender.datePattern</span> <span class="token punctuation">=</span> <span class="token value attr-value">'.'yyyy-MM-dd-HH-mm-ss </span>
+<span class="token comment"># [完全的，最合适的是按照天划分]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h6 id="3-3-4-JDBCAppender"><a href="#3-3-4-JDBCAppender" class="headerlink" title="3.3.4 &#x3D;&#x3D;JDBCAppender&#x3D;&#x3D;"></a>3.3.4 &#x3D;&#x3D;JDBCAppender&#x3D;&#x3D;</h6><pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token key attr-name">log4j.appender.dbAppender</span> <span class="token punctuation">=</span> <span class="token value attr-value">org.apache.log4j.jdbc.JDBCAppender</span>
+<span class="token key attr-name">log4j.appender.dbAppender.layout</span> <span class="token punctuation">=</span> <span class="token value attr-value">org.apache.log4j.PatternLayout</span>
+<span class="token key attr-name">log4j.appender.dbAppender.driver</span> <span class="token punctuation">=</span> <span class="token value attr-value">com.mysql.jdbc.Driver </span>
+<span class="token key attr-name">log4j.appender.dbAppender.url</span> <span class="token punctuation">=</span> <span class="token value attr-value">jdbc:mysql:///test</span>
+<span class="token comment"># jdbc:mysql://localhost:3306/test</span>
+<span class="token key attr-name">log4j.appender.dbAppender.user</span> <span class="token punctuation">=</span> <span class="token value attr-value">root</span>
+<span class="token key attr-name">log4j.appender.dbAppender.password</span> <span class="token punctuation">=</span> <span class="token value attr-value">root</span>
+<span class="token key attr-name">log4j.appender.dbAppender.sql</span> <span class="token punctuation">=</span> <span class="token value attr-value">INSERT INTO log(preject_name, create_date, log_level, category,file_name,thread_name,line,all_category, message) VALUES ('pro_name', '%d&#123;yyyy-MM-dd HH:mm:ss&#125;', '%p', '%c', '%F','%t', '%L' , '%l' ,'%m')</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h5 id="3-4-自定义logger"><a href="#3-4-自定义logger" class="headerlink" title="3.4 自定义logger"></a>3.4 自定义logger</h5><pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token key attr-name">log4j.logger.com.biturd</span> <span class="token punctuation">=</span> <span class="token value attr-value">info, file</span>
+<span class="token comment"># 命名规范一般是包名,这个是自定义的</span>
+<span class="token comment"># 这个是继承rootLogger的 级别会覆盖,appender追加</span>
+<span class="token key attr-name">log4j.logger.org.apache</span> <span class="token punctuation">=</span> <span class="token value attr-value">error</span>
+<span class="token comment"># 日志灵活输出</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>默认是继承rootlogger的</p>
+<ul>
+<li>实验前</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184902_2f742aa8-5a6e-425c-aca9-cc95927c589b.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-Skg5yDys-1630495502326)(/Users/admin/Documents/my-note/image-old/image-20200405082951614.png)]"></p>
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184905_0087c89f-c297-4761-9edb-8c2303ea0752.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-i55PYQ54-1630495502328)(/Users/admin/Documents/my-note/image-old/image-20200405083024130.png)]"></p>
+<blockquote>
+<p>没有打印123456</p>
+</blockquote>
+<ul>
+<li>实验后<br><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184909_ef920014-30b2-4f56-bcdb-9bc43ccf93b7.png" alt="在这里插入图片描述"></li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184912_c9f0bf2f-f7c9-4607-9573-5aaef731a19d.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-1ECKDThc-1630495502333)(/Users/admin/Documents/my-note/image-old/image-20200405082824218.png)]"></p>
+<blockquote>
+<p>打印123456</p>
+</blockquote>
+<p>可见log4j是&#x3D;&#x3D;通过包名来判断如何使用自定义的日志记录器&#x3D;&#x3D;</p>
+<ul>
+<li>原理</li>
+</ul>
+<p>日志打印logger对象通过包名与配置文件的多个自定义的logger对比，如果没有找到就用默认的rootlogger。</p>
+<h3 id="3-3-JCL-门面框架-只支持这几种所以淘汰了"><a href="#3-3-JCL-门面框架-只支持这几种所以淘汰了" class="headerlink" title="3.3 JCL[门面框架] [只支持这几种所以淘汰了]"></a>3.3 JCL[门面框架] [只支持这几种所以淘汰了]</h3><blockquote>
+<p>门面框架出现背景： 初期小项目用jul-&gt; 后期用log4j 需要切换框架，麻烦 </p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184915_8de27000-0a7b-4a89-807b-d037c717ad01.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-wzt2g6Pq-1630495502378)(/Users/admin/Documents/my-note/image-old/image-20200405083911433.png)]"></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Test</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testQuickJCL</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token class-name">Log</span> log <span class="token operator">=</span> <span class="token class-name">LogFactory</span><span class="token punctuation">.</span><span class="token function">getLog</span><span class="token punctuation">(</span><span class="token class-name">JCLTest</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token number">123456</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li>1.没有log4j依赖时，默认使用jul</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184918_c7bae7bd-802b-4f92-ad72-df37f53a2e37.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-G06jdQIr-1630495502382)(/Users/admin/Documents/my-note/image-old/image-20200405093515568.png)]"></p>
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184920_9fb2cb91-9dcd-4fef-8ed6-a1f48341af9d.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-syR2SHug-1630495502385)(/Users/admin/Documents/my-note/image-old/image-20200405093429447.png)]"></p>
+<ul>
+<li>有log4j依赖时，默认使用log4j</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184923_6c1580d7-38d0-49cf-ab7e-8d3457606501.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-UEM2lObh-1630495502387)(/Users/admin/Documents/my-note/image-old/image-20200405093613785.png)]"></p>
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184926_058eb3c3-d836-4622-9075-dc14e4ef5074.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-UbPFndTo-1630495502388)(/Users/admin/Documents/my-note/image-old/image-20200405093843684.png)]"></p>
+<h4 id="3-3-1-原理"><a href="#3-3-1-原理" class="headerlink" title="3.3.1 原理"></a>3.3.1 原理</h4><p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184929_abfa9633-1725-469c-a34d-14fc41f9ce08.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-JEiU0OLG-1630495502390)(/Users/admin/Documents/my-note/image-old/image-20200405102418149.png)]"></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// 查找的log类的范围</span>
+<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> classesToDiscover <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+            <span class="token constant">LOGGING_IMPL_LOG4J_LOGGER</span><span class="token punctuation">,</span>
+            <span class="token string">"org.apache.commons.logging.impl.Jdk14Logger"</span><span class="token punctuation">,</span>
+            <span class="token string">"org.apache.commons.logging.impl.Jdk13LumberjackLogger"</span><span class="token punctuation">,</span>
+            <span class="token string">"org.apache.commons.logging.impl.SimpleLog"</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// 查找log类的具体实现</span>
+<span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">&lt;</span>classesToDiscover<span class="token punctuation">.</span>length <span class="token operator">&amp;&amp;</span> result <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            result <span class="token operator">=</span> <span class="token function">createLogFromClass</span><span class="token punctuation">(</span>classesToDiscover<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> logCategory<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// 利用反射技术根据名字字符串查找类</span>
+<span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+                    c <span class="token operator">=</span> <span class="token class-name">Class</span><span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span>logAdapterClassName<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> currentCL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">ClassNotFoundException</span> originalClassNotFoundException<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    
+<span class="token comment">// 如果找到了</span>
+                constructor <span class="token operator">=</span> c<span class="token punctuation">.</span><span class="token function">getConstructor</span><span class="token punctuation">(</span>logConstructorSignature<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token class-name">Object</span> o <span class="token operator">=</span> constructor<span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span>params<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                <span class="token comment">// Note that we do this test after trying to create an instance</span>
+                <span class="token comment">// [rather than testing Log.class.isAssignableFrom(c)] so that</span>
+                <span class="token comment">// we don't complain about Log hierarchy problems when the</span>
+                <span class="token comment">// adapter couldn't be instantiated anyway.</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>o <span class="token keyword">instanceof</span> <span class="token class-name">Log</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    logAdapterClass <span class="token operator">=</span> c<span class="token punctuation">;</span>
+                    logAdapter <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Log</span><span class="token punctuation">)</span> o<span class="token punctuation">;</span>
+                    <span class="token keyword">break</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>    
+    
+<span class="token comment">// 适配器将找到的log类的构造方法、以及log类的Name适配为实例属性。</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>logAdapterClass <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> affectState<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// We've succeeded, so set instance fields</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>logClassName   <span class="token operator">=</span> logAdapterClassName<span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>logConstructor <span class="token operator">=</span> constructor<span class="token punctuation">;</span>
+
+            <span class="token comment">// Identify the &lt;code>setLogFactory&lt;/code> method (if there is one)</span>
+            <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span>logMethod <span class="token operator">=</span> logAdapterClass<span class="token punctuation">.</span><span class="token function">getMethod</span><span class="token punctuation">(</span><span class="token string">"setLogFactory"</span><span class="token punctuation">,</span> logMethodSignature<span class="token punctuation">)</span><span class="token punctuation">;</span>
+               <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+            <span class="token punctuation">&#125;</span>
+	<span class="token keyword">return</span> logAdapter<span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="3-4-SLF4j-门面框架"><a href="#3-4-SLF4j-门面框架" class="headerlink" title="3.4 SLF4j[门面框架]"></a>3.4 SLF4j[门面框架]</h3><pre class="line-numbers language-none"><code class="language-none">Note that SLF4J-enabling your library implies the addition of only a single mandatory dependency, namely slf4j-api.jar. If no binding is found on the class path, then SLF4J will default to a no-operation implementation.
+
+slf4j意味着仅添加一个强制性依赖项，slf4j-api.jar。如果在类路径上没有找到绑定,他就默认无操作实现。[只是一套接口]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="3-4-1-原理："><a href="#3-4-1-原理：" class="headerlink" title="3.4.1 原理："></a>3.4.1 原理：</h4><p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184932_261e3335-28bf-4fab-b325-4a314e7a6fa3.png" alt="在这里插入图片描述"></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// 如果有多个实现就打印，并使用第一个实现框架</span>
+
+ <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">isAmbiguousStaticLoggerBinderPathSet</span><span class="token punctuation">(</span>binderPathSet<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token class-name">Util</span><span class="token punctuation">.</span><span class="token function">report</span><span class="token punctuation">(</span><span class="token string">"Class path contains multiple SLF4J bindings."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">Iterator</span> i$ <span class="token operator">=</span> binderPathSet<span class="token punctuation">.</span><span class="token function">iterator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="3-4-2-日志桥接技术"><a href="#3-4-2-日志桥接技术" class="headerlink" title="3.4.2 日志桥接技术"></a>3.4.2 日志桥接技术</h4><p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184935_25649de2-1be3-489e-985f-210772947100.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-UngUJ6DV-1630495502394)(/Users/admin/Documents/my-note/image-old/image-20200405232257770.png)]"></p>
+<h4 id="3-4-3-桥接技术-死循环的原因-桥接不能和适配器同时出现-jar包"><a href="#3-4-3-桥接技术-死循环的原因-桥接不能和适配器同时出现-jar包" class="headerlink" title="3.4.3 [桥接技术]死循环的原因 [桥接不能和适配器同时出现(jar包)]"></a>3.4.3 [桥接技术]死循环的原因 [桥接不能和适配器同时出现(jar包)]</h4><p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184938_fe8a32c1-437e-4c91-8223-e7dbeac982aa.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-ekVHT1OV-1630495502395)(/Users/admin/Documents/my-note/image-old/image-20200405231826182.png)]"></p>
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184941_53ad72ec-76d5-447d-a5f0-a75c45372422.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-1W5SHKTY-1630495502398)(/Users/admin/Documents/my-note/image-old/image-20200405232029754.png)]"></p>
+<h3 id="3-5-logback-实现框架"><a href="#3-5-logback-实现框架" class="headerlink" title="3.5 logback[实现框架]"></a>3.5 logback[实现框架]</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/gavincoder/p/10091757.html">https://www.cnblogs.com/gavincoder/p/10091757.html</a></p>
+<h4 id="3-5-0-基础代码"><a href="#3-5-0-基础代码" class="headerlink" title="3.5.0 基础代码"></a>3.5.0 基础代码</h4><p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184944_c55759a6-0f7d-41ff-8691-70a634c59189.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-8IOlcpJl-1630495502399)(/Users/admin/Documents/my-note/image-old/image-20200406071803831.png)]"></p>
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184947_77de8ad6-a006-4e86-b121-14d50d030eeb.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-cjObYrM4-1630495502401)(/Users/admin/Documents/my-note/image-old/image-20200406071937720.png)]"></p>
+<p>依赖关系</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>ch.qos.logback<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>logback-classic<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.2.3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+
+<span class="token comment">&lt;!-- 只需要导入logback-classic就可以了,被依赖的会自动导入 --></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token prolog">&lt;?xml version="1.0" encoding="utf-8" ?></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span> <span class="token attr-name">debug</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pattern<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>%d&#123;HH:mm:ss.SSS&#125; [%thread] [%-5level] %logger&#123;36&#125; - %msg%n<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>log_back<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/logs<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>console<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ch.qos.logback.core.ConsoleAppender<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>target</span><span class="token punctuation">></span></span>System.err<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>target</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>encoder</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ch.qos.logback.classic.encoder.PatternLayoutEncoder<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>pattern</span><span class="token punctuation">></span></span>$&#123;pattern&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>pattern</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>encoder</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>appender</span><span class="token punctuation">></span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>file<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ch.qos.logback.core.FileAppender<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token comment">&lt;!-- 日志保存的位置 --></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>file</span><span class="token punctuation">></span></span>$&#123;log_dir&#125;/logback.log<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>file</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>encoder</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ch.qos.logback.classic.encoder.PatternLayoutEncoder<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>pattern</span><span class="token punctuation">></span></span>$&#123;pattern&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>pattern</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>encoder</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>appender</span><span class="token punctuation">></span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>htmlFile<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ch.qos.logback.core.FileAppender<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>file</span><span class="token punctuation">></span></span>$&#123;log_dir&#125;/logback.html<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>file</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>encoder</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ch.qos.logback.core.encoder.LayoutWrappingEncoder<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>layout</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ch.qos.logback.classic.html.HTMLLayout<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>pattern</span><span class="token punctuation">></span></span>%d&#123;HH:mm:ss.SSS&#125; [%thread] [%-5level] %logger&#123;36&#125; - %msg%n"<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>pattern</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>layout</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>encoder</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>appender</span><span class="token punctuation">></span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>rollFile<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ch.qos.logback.core.rolling.RollingFileAppender<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>file</span><span class="token punctuation">></span></span>$&#123;log_dir&#125;/logback.html<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>file</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>encoder</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ch.qos.logback.classic.encoder.PatternLayoutEncoder<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>pattern</span><span class="token punctuation">></span></span>$&#123;pattern&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>pattern</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>encoder</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>rollingPolicy</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>fileNamePattern</span><span class="token punctuation">></span></span>$&#123;log_dir&#125;/rolling.%d&#123;yyyy-MM-dd&#125;.log.gz<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>fileNamePattern</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>maxFileSize</span><span class="token punctuation">></span></span>1MB<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>maxFileSize</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>rollingPolicy</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>appender</span><span class="token punctuation">></span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>root</span> <span class="token attr-name">level</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ALL<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender-ref</span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>console<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>appender-ref</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>root</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h4 id="3-5-1-三个模块"><a href="#3-5-1-三个模块" class="headerlink" title="3.5.1 三个模块"></a>3.5.1 三个模块</h4><ul>
+<li>logback-core: 其他两个模块的基础</li>
+<li>logback-classic: log4j的改良版本[ 完整实现了slf4j的api ]</li>
+<li>logback-access: 访问模块和servlet容器集成提供通过Http访问日志的功能</li>
+</ul>
+<h4 id="3-5-2-高阶用法-过滤器及异步日志、自定义logger"><a href="#3-5-2-高阶用法-过滤器及异步日志、自定义logger" class="headerlink" title="3.5.2 高阶用法 [ 过滤器及异步日志、自定义logger ]"></a>3.5.2 高阶用法 [ 过滤器及异步日志、自定义logger ]</h4><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">  <span class="token comment">&lt;!-- 过滤器用法 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>rollFile<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ch.qos.logback.core.rolling.RollingFileAppender<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>file</span><span class="token punctuation">></span></span>$&#123;log_dir&#125;/logback.html<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>file</span><span class="token punctuation">></span></span>
+       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>encoder</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ch.qos.logback.classic.encoder.PatternLayoutEncoder<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+           <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>pattern</span><span class="token punctuation">></span></span>$&#123;pattern&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>pattern</span><span class="token punctuation">></span></span>
+       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>encoder</span><span class="token punctuation">></span></span>
+       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>rollingPolicy</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+           <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>fileNamePattern</span><span class="token punctuation">></span></span>$&#123;log_dir&#125;/rolling.%d&#123;yyyy-MM-dd&#125;.log.gz<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>fileNamePattern</span><span class="token punctuation">></span></span>
+           <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>maxFileSize</span><span class="token punctuation">></span></span>1MB<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>maxFileSize</span><span class="token punctuation">></span></span>
+       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>rollingPolicy</span><span class="token punctuation">></span></span>
+       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filter</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ch.qos.logback.classic.filter.LevelFilter<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+           <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>level</span><span class="token punctuation">></span></span>ERROR<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>level</span><span class="token punctuation">></span></span>
+           <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>onMatch</span><span class="token punctuation">></span></span>ACCEPT<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>onMatch</span><span class="token punctuation">></span></span>
+           <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>onMisMatch</span><span class="token punctuation">></span></span>DENY<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>onMisMatch</span><span class="token punctuation">></span></span>
+       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filter</span><span class="token punctuation">></span></span>
+   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>appender</span><span class="token punctuation">></span></span>
+
+   <span class="token comment">&lt;!-- 异步日志 --></span>
+   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>async<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ch.qos.logback.classic.AsyncAppender<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+       <span class="token comment">&lt;!-- 指定一个具体的Appender --></span>
+       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender-ref</span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>rollFile<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>appender</span><span class="token punctuation">></span></span>
+
+   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>root</span> <span class="token attr-name">level</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ALL<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender-ref</span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>console<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>appender-ref</span><span class="token punctuation">></span></span>
+       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender-ref</span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>async<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>appender-ref</span><span class="token punctuation">></span></span>
+   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>root</span><span class="token punctuation">></span></span>
+
+   <span class="token comment">&lt;!-- 自定义logger对象 additivity决定是否集成rootLogger --></span>
+   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>logger</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>com.biturd<span class="token punctuation">"</span></span> <span class="token attr-name">level</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>info<span class="token punctuation">"</span></span> <span class="token attr-name">additivity</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender-ref</span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>console<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>logger</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="3-5-3-log4j格式转logback-pattern变了"><a href="#3-5-3-log4j格式转logback-pattern变了" class="headerlink" title="3.5.3 log4j格式转logback [ pattern变了 ]"></a>3.5.3 log4j格式转logback [ pattern变了 ]</h4><p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184950_6ac26599-8bec-4e4d-becd-9f47a7a1fd67.png" alt="在这里插入图片描述"></p>
+<h4 id="3-5-4-logback-access使用"><a href="#3-5-4-logback-access使用" class="headerlink" title="3.5.4 logback-access使用"></a>3.5.4 logback-access使用</h4><blockquote>
+<p>使用这个来替换tomcat或jetty的日志<br><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184953_47858b67-cee0-4e0f-a488-eaaad19ab99b.png" alt="在这里插入图片描述"></p>
+</blockquote>
+<h3 id="3-6-log4j2-实现框架"><a href="#3-6-log4j2-实现框架" class="headerlink" title="3.6 log4j2[实现框架]"></a>3.6 log4j2[实现框架]</h3><blockquote>
+<p>虽然也是日志门面,但是习惯上还是用slf4j做日志门面</p>
+</blockquote>
+<h4 id="1-log4j2日志门面用法-了解"><a href="#1-log4j2日志门面用法-了解" class="headerlink" title="1.log4j2日志门面用法[了解]"></a>1.log4j2日志门面用法[了解]</h4><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.apache.logging.log4j<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>log4j-api<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>2.11.2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.apache.logging.log4j<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>log4j-core<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>2.11.2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token prolog">&lt;?xml version="1.0" encoding="UTF-8"?></span>
+<span class="token comment">&lt;!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL --></span>
+<span class="token comment">&lt;!--Configuration后面的status，这个用于设置log4j2自身内部的信息输出，可以不设置，当设置成trace时，你会看到log4j2内部各种详细输出--></span>
+<span class="token comment">&lt;!--monitorInterval：Log4j能够自动检测修改配置 文件和重新配置本身，设置间隔秒数--></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span> <span class="token attr-name">status</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>WARN<span class="token punctuation">"</span></span> <span class="token attr-name">monitorInterval</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>30<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token comment">&lt;!--先定义所有的appender--></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appenders</span><span class="token punctuation">></span></span>
+        <span class="token comment">&lt;!--这个输出控制台的配置--></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>console</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Console<span class="token punctuation">"</span></span> <span class="token attr-name">target</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>SYSTEM_OUT<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token comment">&lt;!--输出日志的格式--></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>PatternLayout</span> <span class="token attr-name">pattern</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>[%d&#123;HH:mm:ss:SSS&#125;] [%p] - %l - %m%n<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>console</span><span class="token punctuation">></span></span>
+        <span class="token comment">&lt;!--文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，这个也挺有用的，适合临时测试用--></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>File</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>log<span class="token punctuation">"</span></span> <span class="token attr-name">fileName</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>log/test.log<span class="token punctuation">"</span></span> <span class="token attr-name">append</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>PatternLayout</span> <span class="token attr-name">pattern</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>%d&#123;HH:mm:ss.SSS&#125; %-5level %class&#123;36&#125; %L %M - %msg%xEx%n<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>File</span><span class="token punctuation">></span></span>
+        <span class="token comment">&lt;!-- 这个会打印出所有的info及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档--></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>RollingFile</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>RollingFileInfo<span class="token punctuation">"</span></span> <span class="token attr-name">fileName</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$&#123;sys:user.home&#125;/logs/info.log<span class="token punctuation">"</span></span>
+                     <span class="token attr-name">filePattern</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$&#123;sys:user.home&#125;/logs/$$&#123;date:yyyy-MM&#125;/info-%d&#123;yyyy-MM-dd&#125;-%i.log<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token comment">&lt;!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）--></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ThresholdFilter</span> <span class="token attr-name">level</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>info<span class="token punctuation">"</span></span> <span class="token attr-name">onMatch</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ACCEPT<span class="token punctuation">"</span></span> <span class="token attr-name">onMismatch</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>DENY<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>PatternLayout</span> <span class="token attr-name">pattern</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>[%d&#123;HH:mm:ss:SSS&#125;] [%p] - %l - %m%n<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Policies</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>TimeBasedTriggeringPolicy</span><span class="token punctuation">/></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>SizeBasedTriggeringPolicy</span> <span class="token attr-name">size</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>100 MB<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>Policies</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>RollingFile</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>RollingFile</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>RollingFileWarn<span class="token punctuation">"</span></span> <span class="token attr-name">fileName</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$&#123;sys:user.home&#125;/logs/warn.log<span class="token punctuation">"</span></span>
+                     <span class="token attr-name">filePattern</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$&#123;sys:user.home&#125;/logs/$$&#123;date:yyyy-MM&#125;/warn-%d&#123;yyyy-MM-dd&#125;-%i.log<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ThresholdFilter</span> <span class="token attr-name">level</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>warn<span class="token punctuation">"</span></span> <span class="token attr-name">onMatch</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ACCEPT<span class="token punctuation">"</span></span> <span class="token attr-name">onMismatch</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>DENY<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>PatternLayout</span> <span class="token attr-name">pattern</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>[%d&#123;HH:mm:ss:SSS&#125;] [%p] - %l - %m%n<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Policies</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>TimeBasedTriggeringPolicy</span><span class="token punctuation">/></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>SizeBasedTriggeringPolicy</span> <span class="token attr-name">size</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>100 MB<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>Policies</span><span class="token punctuation">></span></span>
+            <span class="token comment">&lt;!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了20 --></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DefaultRolloverStrategy</span> <span class="token attr-name">max</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>20<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>RollingFile</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>RollingFile</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>RollingFileError<span class="token punctuation">"</span></span> <span class="token attr-name">fileName</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$&#123;sys:user.home&#125;/logs/error.log<span class="token punctuation">"</span></span>
+                     <span class="token attr-name">filePattern</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$&#123;sys:user.home&#125;/logs/$$&#123;date:yyyy-MM&#125;/error-%d&#123;yyyy-MM-dd&#125;-%i.log<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ThresholdFilter</span> <span class="token attr-name">level</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>error<span class="token punctuation">"</span></span> <span class="token attr-name">onMatch</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ACCEPT<span class="token punctuation">"</span></span> <span class="token attr-name">onMismatch</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>DENY<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>PatternLayout</span> <span class="token attr-name">pattern</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>[%d&#123;HH:mm:ss:SSS&#125;] [%p] - %l - %m%n<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Policies</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>TimeBasedTriggeringPolicy</span><span class="token punctuation">/></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>SizeBasedTriggeringPolicy</span> <span class="token attr-name">size</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>100 MB<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>Policies</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>RollingFile</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>appenders</span><span class="token punctuation">></span></span>
+    <span class="token comment">&lt;!--然后定义logger，只有定义了logger并引入的appender，appender才会生效--></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>loggers</span><span class="token punctuation">></span></span>
+        <span class="token comment">&lt;!--过滤掉spring和mybatis的一些无用的DEBUG信息--></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>logger</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>org.springframework<span class="token punctuation">"</span></span> <span class="token attr-name">level</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>INFO<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>logger</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>logger</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>org.mybatis<span class="token punctuation">"</span></span> <span class="token attr-name">level</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>INFO<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>logger</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>root</span> <span class="token attr-name">level</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>all<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender-ref</span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Console<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender-ref</span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>RollingFileInfo<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender-ref</span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>RollingFileWarn<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender-ref</span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>RollingFileError<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>root</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>loggers</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="2-log4j2异步日志原理"><a href="#2-log4j2异步日志原理" class="headerlink" title="2. log4j2异步日志原理"></a>2. log4j2异步日志原理</h4><p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184957_ba5c627c-81a9-49dc-8ded-3ceb775e4a8d.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-iTd2Op1i-1630495502409)(/Users/admin/Documents/my-note/image-old/image-20200414122159052.png)]"></p>
+<p>两种方式</p>
+<ul>
+<li>AsyncAppender</li>
+<li>AsyncLogger</li>
+</ul>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">      <span class="token comment">&lt;!-- log4j2异步日志需要提供的依赖 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+          <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>com.lmax<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+          <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>disruptor<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+          <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>3.3.4<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101185001_fe5cc76d-7ad9-4a64-ae32-62bdc856f8ed.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-zjEX5Jc3-1630495502415)(/Users/admin/Documents/my-note/image-old/image-20200414123002440.png)]"></p>
+<h3 id="3-7-SpringBoot中的应用"><a href="#3-7-SpringBoot中的应用" class="headerlink" title="3.7 SpringBoot中的应用"></a>3.7 SpringBoot中的应用</h3><p><em>虽然使用默认logback,可以不导入logback.xml文件，而是在application.xml里面也能设置日志框架的信息,但是一般比较粗略,所以还是需要特定的配置文件的</em></p>
+<blockquote>
+<p>SpringBoot的Starters包含了一系列可以集成到应用里面的依赖包，你可以一站式集成Spring及其他技术，而不需要到处找示例代码和依赖包。如你想使用Spring JPA访问数据库，只要加入spring-boot-starter-data-jpa启动器依赖就能使用了。<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_35974759/article/details/87168257">https://blog.csdn.net/qq_35974759/article/details/87168257</a></p>
+<p>Starters包含了许多项目中需要用到的依赖，它们能快速持续的运行，都是一系列得到支持的管理传递性依赖。</p>
+</blockquote>
+<blockquote>
+<p> 依赖关系: 指向谁就依赖谁</p>
+</blockquote>
+<h3 id="3-8-代码总结"><a href="#3-8-代码总结" class="headerlink" title="3.8 代码总结"></a>3.8 代码总结</h3><h4 id="JUL"><a href="#JUL" class="headerlink" title="JUL"></a>JUL</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">Logger</span> logger <span class="token operator">=</span> <span class="token class-name">Logger</span><span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span><span class="token string">"com.biturd.JULTest"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 每一个日志记录器都需要有一个唯一标识</span>
+logger<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"hello jul"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+logger<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token class-name">Level</span><span class="token punctuation">.</span><span class="token constant">INFO</span><span class="token punctuation">,</span> <span class="token string">"msg"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="log4j"><a href="#log4j" class="headerlink" title="log4j"></a>log4j</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java">        <span class="token comment">// 不使用配置文件 用默认的方式</span>
+<span class="token comment">//        BasicConfigurator.configure();</span>
+        <span class="token class-name">LogLog</span><span class="token punctuation">.</span><span class="token function">setInternalDebugging</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 获取日志记录器对象</span>
+        <span class="token class-name">Logger</span> logger <span class="token operator">=</span> <span class="token class-name">Logger</span><span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span>log4jTest<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 日志记录输出</span>
+        logger<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"hello log4j"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        logger<span class="token punctuation">.</span><span class="token function">fatal</span><span class="token punctuation">(</span><span class="token string">"造成系统崩溃的严重错误"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 常用的</span>
+        logger<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"不会让系统停止的错误信息"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        logger<span class="token punctuation">.</span><span class="token function">warn</span><span class="token punctuation">(</span><span class="token string">"可能发生错误警告信息"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        logger<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"运行信息,数据连接、网络连接、IO、操作等"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        logger<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"调试信息,一般在开发中使用,记录程序变量参数传递信息等"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        logger<span class="token punctuation">.</span><span class="token function">trace</span><span class="token punctuation">(</span><span class="token string">"追踪信息,记录程序所有的流程信息"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="JCL"><a href="#JCL" class="headerlink" title="JCL"></a>JCL</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">Log</span> log <span class="token operator">=</span> <span class="token class-name">LogFactory</span><span class="token punctuation">.</span><span class="token function">getLog</span><span class="token punctuation">(</span><span class="token class-name">JCLTest</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token number">123456</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h4 id="slf4j-重点"><a href="#slf4j-重点" class="headerlink" title="slf4j[重点]"></a>slf4j[重点]</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Logger</span> <span class="token constant">LOGGER</span> <span class="token operator">=</span> <span class="token class-name">LoggerFactory</span><span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span><span class="token class-name">Slf4jTest</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testSlf4j</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token constant">LOGGER</span><span class="token punctuation">.</span><span class="token function">warn</span><span class="token punctuation">(</span><span class="token string">"123456"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token constant">LOGGER</span><span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"123456"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="log4j2-自己的门面"><a href="#log4j2-自己的门面" class="headerlink" title="log4j2[自己的门面]"></a>log4j2[自己的门面]</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Logger</span> <span class="token constant">LOGGER</span> <span class="token operator">=</span> <span class="token class-name">LogManager</span><span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span>log4j2Test<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@Test</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testQuick</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span><span class="token punctuation">&#123;</span>
+    <span class="token constant">LOGGER</span><span class="token punctuation">.</span><span class="token function">fatal</span><span class="token punctuation">(</span><span class="token string">"fatal"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token constant">LOGGER</span><span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token constant">LOGGER</span><span class="token punctuation">.</span><span class="token function">warn</span><span class="token punctuation">(</span><span class="token string">"warn"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token constant">LOGGER</span><span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"info"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token constant">LOGGER</span><span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"debug"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token constant">LOGGER</span><span class="token punctuation">.</span><span class="token function">trace</span><span class="token punctuation">(</span><span class="token string">"trace"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="slf4j的各种依赖关系-比较重要就再说一遍"><a href="#slf4j的各种依赖关系-比较重要就再说一遍" class="headerlink" title="slf4j的各种依赖关系[ 比较重要就再说一遍 ]"></a>slf4j的各种依赖关系[ 比较重要就再说一遍 ]</h4><h5 id="1-slf4j-jdk"><a href="#1-slf4j-jdk" class="headerlink" title="1. slf4j-jdk"></a>1. slf4j-jdk</h5><p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101185004_af7f7277-0acd-4bc4-82d7-3cd46f4e9a28.png" alt="在这里插入图片描述"></p>
+<h5 id="2-slf4j-log4j"><a href="#2-slf4j-log4j" class="headerlink" title="2.  slf4j-log4j"></a>2.  slf4j-log4j</h5><p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101185008_06057faa-3c20-4918-90a5-90891b5970bb.png" alt="在这里插入图片描述"></p>
+<h5 id="3-slf4j-logback"><a href="#3-slf4j-logback" class="headerlink" title="3. slf4j-logback"></a>3. slf4j-logback</h5><p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101185011_58c23e1e-3781-4095-bf5b-f57eda80fe01.png" alt="在这里插入图片描述"></p>
+<h4 id="4-slf4j-log4j2"><a href="#4-slf4j-log4j2" class="headerlink" title="4.slf4j-log4j2"></a>4.slf4j-log4j2</h4><p><img src="https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101185015_8638e825-4d47-420d-b5a4-b6202dd0ae83.png" alt="在这里插入图片描述"></p>
+<h4 id="其他的比如桥接技术-详细的-https-blog-csdn-net-jeikerxiao-article-details-62423749"><a href="#其他的比如桥接技术-详细的-https-blog-csdn-net-jeikerxiao-article-details-62423749" class="headerlink" title="其他的比如桥接技术[ 详细的: https://blog.csdn.net/jeikerxiao/article/details/62423749 ]"></a>其他的比如桥接技术[ 详细的: <a target="_blank" rel="noopener" href="https://blog.csdn.net/jeikerxiao/article/details/62423749">https://blog.csdn.net/jeikerxiao/article/details/62423749</a> ]</h4><p>使用slf4j统一各种日志<br>当项目是使用多种日志API时，可以统一适配到slf4j，然后通过slf4j适配底层实现。</p>
+<p>中间使用slf4j进行统一项目中使用的多种日志框架的API，然后转发到slf4j,slf4j再底层用开发者想用的一个日志框架来进行日志系统的实现。从而达到了多种日志的统一实现。</p>
+<ul>
+<li><p>旧日志API到slf4j的适配器</p>
+</li>
+<li><p>slf4j到新日志实现的适配器</p>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p> 问题：目前的应用程序（application）中已经使用了以下的几种API来进行日志的编程：</p>
+</blockquote>
+<ol>
+<li>commons-logging</li>
+<li>jdk-loging<br>现在想统一将日志的输出交给log4j1。</li>
+</ol>
+<p>解决方法：[两种]</p>
+<ol>
+<li>将上面的日志系统全部转换到slf4j   [ 桥接技术 ]<ol>
+<li>移除commons-logging(可以不移除)，使用jcl-over-slf4j(桥接)将commons-logging的底层日志输出切换到sl4j.</li>
+<li>使用jul-to-slf4j(桥接)，将jul的日志输出切换到slf4j.</li>
+</ol>
+</li>
+<li>让slf4j选择log4j1作为底层日志输出<ol>
+<li>加入slf4j-api.jar</li>
+<li>加入slf4j-log4j12.jar</li>
+<li>加入log4j.jar</li>
+</ol>
+</li>
+</ol>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">biturd</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://biturd.com/2023/01/07/java-ri-zhi-kuang-jia-zong-jie-slf4j-log4j-logback/">https://biturd.com/2023/01/07/java-ri-zhi-kuang-jia-zong-jie-slf4j-log4j-logback/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">biturd</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E5%90%8E%E7%AB%AF/">
+                                    <span class="chip bg-color">后端</span>
+                                </a>
+                            
+                                <a href="/tags/Java/">
+                                    <span class="chip bg-color">Java</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2024/09/27/clickhouse-yun-wei-pian-yi-docker-compose-kuai-su-bu-shu-clickhouse-ji-qun/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="clickhouse运维篇（一）：docker-compose 快速部署clickhouse集群.">
+                        
+                        <span class="card-title">clickhouse运维篇（一）：docker-compose 快速部署clickhouse集群.</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2024-09-27
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E8%BF%90%E7%BB%B4/" class="post-category">
+                                    运维
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%90%8E%E7%AB%AF/">
+                        <span class="chip bg-color">后端</span>
+                    </a>
+                    
+                    <a href="/tags/%E8%BF%90%E7%BB%B4/">
+                        <span class="chip bg-color">运维</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2022/11/07/vim-gao-jie-bi-jiao-hao-yong-cao-zuo-ji-lu/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="vim高阶比较好用操作记录">
+                        
+                        <span class="card-title">vim高阶比较好用操作记录</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-11-07
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%B7%A5%E5%85%B7/" class="post-category">
+                                    工具
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B7%A5%E5%85%B7/">
+                        <span class="chip bg-color">工具</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2024</span>
+            
+            <a href="/about" target="_blank">biturd</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/Bit-urd" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:1139739273@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1181062873" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1181062873" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+    
+    
+
+    <!-- 雪花特效 -->
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
