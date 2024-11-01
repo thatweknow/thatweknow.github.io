@@ -297,13 +297,13 @@ mySkills:
       percent: 80%
     Kafka:
       background: 'linear-gradient(to right, #00BCD4 0%, #80DEEA 100%)'
-      percent: 70%
+      percent: 85%
     MySQL:
       background: 'linear-gradient(to right, #4CAF50 0%, #81C784 100%)'
       percent: 90%
     Redis:
       background: 'linear-gradient(to right, #FFEB3B 0%, #FFF176 100%)'
-      percent: 75%
+      percent: 85%
     Clickhouse:
       background: 'linear-gradient(to right, #FF5722 0%, #FF8A65 100%)'
       percent: 75%      

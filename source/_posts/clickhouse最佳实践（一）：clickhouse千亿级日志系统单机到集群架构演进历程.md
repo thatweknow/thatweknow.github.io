@@ -1,4 +1,17 @@
-﻿@[TOC](clickhouse千亿级日志系统单机到集群架构演进历程)
+﻿---
+title: clickhouse最佳实践（一）：clickhouse千亿级日志系统单机到集群架构演进历程
+date: 2024-10-07 19:25:00
+top: true
+cover: true
+toc: true
+mathjax: false
+categories: 后端
+tags:
+  - 后端
+  - 架构
+---   
+
+@[TOC](clickhouse千亿级日志系统单机到集群架构演进历程)
 > 最佳实践系列文章持续完善中， 记录了业务系统从碰到瓶颈到迭代的过程
 # 1. 初始阶段：单机部署
 

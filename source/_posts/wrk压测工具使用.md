@@ -1,6 +1,6 @@
 ﻿---
 title: wrk压测工具使用
-date: 2018-09-07 09:25:00
+date: 2022-09-07 09:25:00
 top: true
 cover: true
 toc: true

@@ -1,4 +1,17 @@
-﻿在本教程中，我们将学习如何使用 Docker Compose 部署一个带有三节点的 ClickHouse 集群，并使用 ZooKeeper 作为分布式协调服务。
+﻿---
+title: clickhouse运维篇（一）：docker-compose 快速部署clickhouse集群.
+date: 2024-09-27 19:25:00
+top: true
+cover: true
+toc: true
+mathjax: false
+categories: 运维
+tags:
+  - 后端
+  - 运维
+---   
+
+
 ## 前提条件
 **注意事项：**
 1. **镜像版本号注意保持一致   [zookeeper:3.7,   clickhouse/clickhouse-server:22.5.4]**

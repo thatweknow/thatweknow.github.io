@@ -1,4 +1,17 @@
-﻿@[TOC](目录)
+﻿---
+title: Java日志框架 总结 slf4j、log4j、logback
+date: 2023-01-07 19:25:00
+top: true
+cover: true
+toc: true
+mathjax: false
+categories: 后端
+tags:
+  - 后端
+  - Java
+---
+
+@[TOC](目录)
 # Java日志技术
 
 ## 1.日志的概念

@@ -1,4 +1,16 @@
-﻿## 1、普通操作
+﻿---
+title: vim高阶比较好用操作记录
+date: 2022-11-07 09:25:00
+top: true
+cover: true
+toc: true
+mathjax: false
+categories: 工具
+tags:
+  - 工具
+---
+
+## 1、普通操作
 [c\d\y都同理，动作]
 - dw删除到词尾、
 - db删除到词首、

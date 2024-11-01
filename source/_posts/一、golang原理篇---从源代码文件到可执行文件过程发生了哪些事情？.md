@@ -1,4 +1,18 @@
-﻿主要过程：
+﻿---
+title: 一、golang原理篇---从源代码文件到可执行文件过程发生了哪些事情？.
+date: 2024-10-07 19:25:00
+top: true
+cover: true
+toc: true
+mathjax: false
+categories: 后端
+tags:
+  - 后端
+  - Golang
+  - 源码
+---
+
+主要过程：
 - 前端编译
 	1. 根据架构初始化不同的链接器Link结构体
 	2. 根据一些参数  比如，go compile后用户输入的参数初始化Link结构体里面的一些字段

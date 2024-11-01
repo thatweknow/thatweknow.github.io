@@ -1,4 +1,16 @@
-﻿
+﻿---
+title: clickhouse运维篇（二）：多机器手动部署ck集群.
+date: 2024-09-28 19:25:00
+top: true
+cover: true
+toc: true
+mathjax: false
+categories: 运维
+tags:
+  - 后端
+  - 运维
+---   
+
 > 熟悉流程并且有真正部署需求可以看一下我的另一篇简化部署的文章，因为多节点配置还是比较麻烦的先要jdk、zookeeper，再ck，还有各种配置文件登录不同机器上手动改配置文件还挺容易出错的。  
 > [clickhouse运维篇（三）：生产环境一键生成配置并快速部署ck集群](https://blog.csdn.net/qq_42873554/article/details/143367712?spm=1001.2014.3001.5501)
 

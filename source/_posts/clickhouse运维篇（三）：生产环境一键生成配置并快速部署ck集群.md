@@ -1,4 +1,18 @@
-﻿![请添加图片描述](https://i-blog.csdnimg.cn/direct/7677be0676904a7687c2f4cc8aef0a46.png)
+﻿---
+title: clickhouse运维篇（三）：生产环境一键生成配置并快速部署ck集群.
+date: 2024-09-29 13:15:00
+top: true
+cover: true
+toc: true
+mathjax: false
+categories: 运维
+tags:
+  - 后端
+  - 运维
+---   
+
+
+![请添加图片描述](https://i-blog.csdnimg.cn/direct/7677be0676904a7687c2f4cc8aef0a46.png)
 
 > 前提条件：先了解集群搭建流程是什么样，需要改哪些配置，有哪些环境，这个文章目的是简化部署。 
 
