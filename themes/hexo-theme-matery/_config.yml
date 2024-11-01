@@ -160,11 +160,12 @@ indexbtn:
 # icon/button will not show up if you leave the corresponding socialLink empty
 # 首页 banner 中的第二行个人信息配置，留空即不启用
 socialLink:
+  csdn: https://blog.csdn.net/qq_42873554
   github:  https://github.com/Bit-urd
   email: 1139739273@qq.com
-  # facebook: # https://www.facebook.com/xxx
+#   facebook: # https://www.facebook.com/xxx
   # twitter: # https://twitter.com/xxx
-  qq: 1181062873
+  qq: 1139739273
   # weibo: # https://weibo.com/xxx
   # zhihu: # https://www.zhihu.com/xxx
   rss: true # true、false
