@@ -7,12 +7,16 @@ param=$1
 cd /Users/admin/my-project/biturd-gp/
 src_dir=$2
 if [ -n "$src_dir" ]; then
-    if [ -d "$src_dir" ]; then
+    if [ "$src_dir" == '.' ]; then
+       echo "【ERROR:】 src_dir is .， relative path is not supported"
+       exit 1
+    elif [ -d "$src_dir" ]; then
         cp -r "$src_dir"/* data/blog/
     else
         cp  $src_dir data/blog/
     fi
 fi
+
 
 python3 install_pic.py
 python3 format_hexo_md.py

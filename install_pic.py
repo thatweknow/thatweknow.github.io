@@ -1,10 +1,12 @@
+import base64
+import json
 import os
 import re
 import time
-import requests
 import uuid
-import base64
-import json
+from urllib.parse import unquote, quote
+
+import requests
 
 # 原始 markdown 目录路径
 markdown_dir = 'data/blog'
@@ -29,6 +31,7 @@ github_base_url = f'https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/h
 def generate_timestamp():
     return time.strftime('%Y%m%d%H%M%S')
 
+
 # 下载非本地图片到临时目录
 def download_image_to_tmp(url, tmp_path):
     try:
@@ -42,7 +45,8 @@ def download_image_to_tmp(url, tmp_path):
         print(f"下载 {url} 时出错: {e}")
     return False
 
-def uploadimg_to_github(new_filename,tmp_path):
+
+def uploadimg_to_github(new_filename, tmp_path):
     local_file_path = tmp_path  # 本地文件路径
 
     # 读取本地文件内容并进行 Base64 编码
@@ -70,9 +74,11 @@ def uploadimg_to_github(new_filename,tmp_path):
     if response.status_code == 201:
         print("文件上传成功:", response.json().get("content").get("html_url"))
     else:
-        print("文件上传失败:", response.json())    
+        print("文件上传失败:", response.json())
 
-# 处理 markdown 文件的图片链接
+    # 处理 markdown 文件的图片链接
+
+
 def process_markdown(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         content = file.read()
@@ -81,6 +87,10 @@ def process_markdown(file_path):
     image_links = re.findall(r'!\[.*?\]\((.*?)\)', content)
 
     for link in image_links:
+        is_encoded = False
+        if link != unquote(link):
+            link = unquote(link)
+            is_encoded = True
         if link.startswith(github_base_url):
             print(f"跳过已上传的图片: {link}")
             continue
@@ -89,6 +99,7 @@ def process_markdown(file_path):
             image_path = os.path.join(os.path.dirname(file_path), link)
 
             # 检查图片是否为本地文件
+            tmp_image_path = ''
             if not os.path.exists(image_path):
                 # 若不是本地文件，则下载至临时目录
                 new_filename = generate_timestamp() + os.path.splitext(link)[1]
@@ -99,8 +110,8 @@ def process_markdown(file_path):
                     image_path = tmp_image_path
                 else:
                     print(f"跳过无法下载的链接: {link}")
-                    continue        
-            # 生成新的 GitHub 文件名和链接
+                    continue
+                    # 生成新的 GitHub 文件名和链接
             new_filename = f'{generate_timestamp()}_{uuid.uuid4()}{os.path.splitext(link)[1]}'
             github_image_url = github_base_url + new_filename
 
@@ -109,7 +120,10 @@ def process_markdown(file_path):
             uploadimg_to_github(new_filename, image_path)
 
             # 替换 Markdown 中的链接
-            content = content.replace(link, github_image_url)
+            if is_encoded:
+                content = content.replace(quote(link), github_image_url)
+            else:
+                content = content.replace(link, github_image_url)
             print(f"替换 {link} 为 {github_image_url}")
 
             # 若为临时文件，删除下载的临时图片
@@ -120,6 +134,7 @@ def process_markdown(file_path):
     # 保存修改后的内容
     with open(file_path, 'w', encoding='utf-8') as file:
         file.write(content)
+
 
 # uploadimg_to_github("test.png","data/img/20241101142848.png")
 
