@@ -152,9 +152,9 @@ logo: /medias/logo.png
 # 首页 banner 中的第二个按钮的配置，包括按钮的显示名称、font awesome图标和按钮的超链接.
 indexbtn:
   enable: true
-  name: Github
-  icon: fab fa-github-alt
-  url: https://github.com/Bit-urd
+  name: CSDN
+  icon: fas fa-c
+  url: https://blog.csdn.net/qq_42873554
 
 # The configurations of the second line of home banner
 # icon/button will not show up if you leave the corresponding socialLink empty
@@ -414,8 +414,14 @@ changyan:
 # 配置是否在 header 中显示 fork me on github 的图标，默认为true，你可以修改为你的仓库地址.
 githubLink:
   enable: true
-  url: https://github.com/blinkfox/hexo-theme-matery
+  url: https://github.com/Bit-urd
   title: Fork Me
+
+csdnLink:
+  enable: true
+  url: https://blog.csdn.net/qq_42873554
+  title: CSDN
+
 
 # The configuration of the Twikoo comment module is not activated by default.
 # To use it, activate the configuration item and set envId.

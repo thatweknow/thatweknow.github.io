@@ -1,5 +1,5 @@
 if ! [ -n "$1" ]; then
-    echo "Usage: sh hexo.sh [s|d] [option:src_dir/src_file]"
+    echo "Usage: sh hexo.sh [a|c|s|d] [option[a|s|d]:src_dir/src_file]"
     exit
 fi
 cur_dir=$(pwd)

@@ -13,9 +13,8 @@
                 <span id="year"><%- theme.time.year %></span>
             <% } %>
             <a href="<%- url_for('/about') %>" target="_blank"><%- config.author %></a>
-            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
-            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
-            <% if (theme.translate.enable) { %>
+
+             <% if (theme.translate.enable) { %>
                 <span id="translate">|&nbsp;繁/简：</span><a id="translateLink" href="javascript:translatePage();">繁</a>
             <% } %>
             <br>
@@ -29,7 +28,7 @@
             <% } %>
             <% if (theme.busuanziStatistics && theme.busuanziStatistics.totalTraffic) { %>
                 <span id="busuanzi_container_site_pv">
-                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;<%- __('siteTotalVisits') %>:&nbsp;
+                &nbsp;&nbsp;<i class="far fa-eye"></i>&nbsp;<%- __('siteTotalVisits') %>:&nbsp;
                     <span id="busuanzi_value_site_pv" class="white-color"></span>
             </span>
             <% } %>
