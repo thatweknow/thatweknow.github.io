@@ -1,16 +1,11 @@
-# 1、docker部署ck集群
-
-在本教程中，我们将学习如何使用 Docker Compose 部署一个带有三节点的 ClickHouse 集群，并使用 ZooKeeper 作为分布式协调服务。
-
+﻿在本教程中，我们将学习如何使用 Docker Compose 部署一个带有三节点的 ClickHouse 集群，并使用 ZooKeeper 作为分布式协调服务。
 ## 前提条件
-
 **注意事项：**
+1. **镜像版本号注意保持一致   [zookeeper:3.7,   clickhouse/clickhouse-server:22.5.4]**
+2. config里面的参数有些是必须的，日志报错缺少参数去官方文档里找 [config.xm参数官网](https://clickhouse.com/docs/en/operations/server-configuration-parameters/settings) 
 
-1. **镜像版本号注意保持一致 [zookeeper:3.7, clickhouse/clickhouse-server:22.5.4]**
-2. config里面的参数有些是必须的，日志报错缺少参数去官方文档里找 [config.xm参数官网](https://clickhouse.com/docs/en/operations/server-configuration-parameters/settings)
 
 在开始之前，请确保您的系统已经安装了以下工具：
-
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 
@@ -20,7 +15,6 @@
 
 ```bash
 mkdir -p clickhouse_cluster/{zk/data1,zk/data2,zk/data3,zk/datalog1,zk/datalog2,zk/datalog3,ck/data/clickhouse01,ck/data/clickhouse02,ck/data/clickhouse03,ck/config/clickhouse01,ck/config/clickhouse02,ck/config/clickhouse03}
-
 ```
 
 ## 第一步：编写 `docker-compose.yml` 文件
@@ -61,7 +55,7 @@ services:
 
   zookeeper2:
     image: zookeeper:3.7
-    hostname: zookeeper2
+    hostname: zookeeper2    
     container_name: zookeeper2
     restart: no
     ports:
@@ -74,10 +68,11 @@ services:
     volumes:
       - ./zk/data2:/data
       - ./zk/datalog2:/datalog
+        
 
   zookeeper3:
     image: zookeeper:3.7
-    hostname: zookeeper3
+    hostname: zookeeper3    
     container_name: zookeeper3
     restart: no
     ports:
@@ -116,7 +111,7 @@ services:
   clickhouse02:
     image: clickhouse/clickhouse-server:23.4.2
     container_name: clickhouse02
-    hostname: clickhouse02
+    hostname: clickhouse02    
     restart: no
     ports:
       - "8124:8123"   # HTTP接口
@@ -137,7 +132,7 @@ services:
   clickhouse03:
     image: clickhouse/clickhouse-server:23.4.2
     container_name: clickhouse03
-    hostname: clickhouse03
+    hostname: clickhouse03        
     restart: no
     ports:
       - "8125:8123"   # HTTP接口
@@ -154,7 +149,6 @@ services:
       - zookeeper1
       - zookeeper2
       - zookeeper3
-
 ```
 
 ### 关键点说明：
@@ -180,8 +174,8 @@ services:
 
     <path>/var/lib/clickhouse/</path>
     <tmp_path>/var/lib/clickhouse/tmp/</tmp_path>
-    <user_files_path>/var/lib/clickhouse/user_files/</user_files_path>
-    <http_port>8123</http_port>
+    <user_files_path>/var/lib/clickhouse/user_files/</user_files_path> 
+    <http_port>8123</http_port> 
 
     <logger>
         <log>/var/log/clickhouse-server/clickhouse.log</log>
@@ -206,7 +200,7 @@ services:
 	    <node index="3">
 	        <host>zookeeper3</host>
 	        <port>2181</port>
-	    </node>
+	    </node>        
     </zookeeper>
 
     <remote_servers>
@@ -244,19 +238,18 @@ services:
                     <host>clickhouse06</host>
                     <port>9000</port>
                 </replica>
-            </shard>
+            </shard>            
         </my_clickhouse_cluster>
     </remote_servers>
 
     <listen_host>::</listen_host>
     <listen_host>0.0.0.0</listen_host>
 </yandex>
-
 ```
 
 ### 关键配置说明：
 
-- **ZooKeeper**：配置了 ClickHouse 连接 Zookeeper，使用 `zookeeper1:2181\\zookeeper1:2181\\zookeeper1:2181` 地址。
+- **ZooKeeper**：配置了 ClickHouse 连接 Zookeeper，使用 `zookeeper1:2181\zookeeper1:2181\zookeeper1:2181` 地址。
 - **集群配置**：`remote_servers` 配置了集群中的三个节点，分别对应 `clickhouse01`、`clickhouse02` 和 `clickhouse03`。
 
 ## 第三步：编写 `users.xml` 文件
@@ -292,7 +285,7 @@ services:
                  也可以使用加密的密码，用上面的shell命令就可以生成
             -->
             <!-- <password_double_sha1_hex></password_double_sha1_hex> -->
-
+			
             <networks incl="networks" replace="replace">
                 <ip>::1</ip>
                 <ip>127.0.0.1</ip>
@@ -311,7 +304,6 @@ services:
         </readonly_user>
     </users>
 </yandex>
-
 ```
 
 ### 用户权限说明：
@@ -325,47 +317,36 @@ services:
 
 ```bash
 docker-compose up -d
-
 ```
 
 `docker-compose up -d` 将启动所有服务，包括 ZooKeeper 和六个 ClickHouse 节点。
 
 ## 第五步：验证集群部署
 
-1. 1.运行以下命令查看容器状态：
-    
+ 1. 1.运行以下命令查看容器状态：
     ```bash
     docker-compose ps
-    
     ```
-    
+
     确保所有容器都处于 "Up" 状态。
-    
+
 2. 2.通过 HTTP 接口访问任意 ClickHouse 节点，查看是否可以成功连接：
-    
+
     ```bash
-    curl <http://localhost:8123>
-    
+    curl http://localhost:8123
     ```
-    
+
     返回类似于 `Ok.` 的响应即表示成功。
-    
 3. 3.从单节点查询集群状态
-    
-    ```bash
-    docker exec -it clickhouse01 bash
-    clickhouse-client
-    
-    select * from system.clusters;
-    select * from system.zookeeper where path='/clickhouse';
-    
-    ```
-    
-
-![https://i-blog.csdnimg.cn/direct/681ddc3d1c0a404ba1f52058a45bb53b.png](https://i-blog.csdnimg.cn/direct/681ddc3d1c0a404ba1f52058a45bb53b.png)
-
+	```bash
+	docker exec -it clickhouse01 bash 
+	clickhouse-client
+	
+	select * from system.clusters;
+	select * from system.zookeeper where path='/clickhouse';
+	```
+![在这里插入图片描述](https://i-blog.csdnimg.cn/direct/681ddc3d1c0a404ba1f52058a45bb53b.png)
 ## 六：配置nginx反向代理实现ck集群负载均衡的读写
-
 ```
 worker_processes auto;
 events {
@@ -384,12 +365,17 @@ http {
         }
     }
 }
-
 ```
-
 ## 七：文件夹结构
 
-![https://i-blog.csdnimg.cn/direct/888f38f9141341d0a2d7ae16357b1f23.png](https://i-blog.csdnimg.cn/direct/888f38f9141341d0a2d7ae16357b1f23.png)
+![在这里插入图片描述](https://i-blog.csdnimg.cn/direct/888f38f9141341d0a2d7ae16357b1f23.png)
+
+
+
+
+
 
 参考链接：
-[https://www.cnblogs.com/yoyo1216/p/13731225.html](https://www.cnblogs.com/yoyo1216/p/13731225.html)[https://www.cnblogs.com/syw20170419/p/16250500.html](https://www.cnblogs.com/syw20170419/p/16250500.html)[https://clickhouse.com/docs/en/operations/server-configuration-parameters/settings](https://clickhouse.com/docs/en/operations/server-configuration-parameters/settings)
+https://www.cnblogs.com/yoyo1216/p/13731225.html
+https://www.cnblogs.com/syw20170419/p/16250500.html
+https://clickhouse.com/docs/en/operations/server-configuration-parameters/settings
