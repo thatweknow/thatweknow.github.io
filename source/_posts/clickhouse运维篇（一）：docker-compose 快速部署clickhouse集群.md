@@ -1,8 +1,6 @@
 ﻿---
 title: clickhouse运维篇（一）：docker-compose 快速部署clickhouse集群.
 date: 2024-09-27 19:25:00
-top: true
-cover: true
 toc: true
 mathjax: false
 categories: 运维
@@ -358,7 +356,7 @@ docker-compose up -d
 	select * from system.clusters;
 	select * from system.zookeeper where path='/clickhouse';
 	```
-![在这里插入图片描述](https://i-blog.csdnimg.cn/direct/681ddc3d1c0a404ba1f52058a45bb53b.png)
+![在这里插入图片描述](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184800_dfc947f0-4201-4972-9762-541afea7ab01.png)
 ## 六：配置nginx反向代理实现ck集群负载均衡的读写
 ```
 worker_processes auto;
@@ -381,7 +379,7 @@ http {
 ```
 ## 七：文件夹结构
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/direct/888f38f9141341d0a2d7ae16357b1f23.png)
+![在这里插入图片描述](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184806_0c793390-74e1-4cdd-9646-c233f6f27402.png)
 
 
 

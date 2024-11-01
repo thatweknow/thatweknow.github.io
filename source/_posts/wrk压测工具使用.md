@@ -1,8 +1,6 @@
 ﻿---
 title: wrk压测工具使用
 date: 2022-09-07 09:25:00
-top: true
-cover: true
 toc: true
 mathjax: false
 categories: 性能优化

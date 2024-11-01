@@ -1,8 +1,6 @@
 ﻿---
 title: vim高阶比较好用操作记录
 date: 2022-11-07 09:25:00
-top: true
-cover: true
 toc: true
 mathjax: false
 categories: 工具

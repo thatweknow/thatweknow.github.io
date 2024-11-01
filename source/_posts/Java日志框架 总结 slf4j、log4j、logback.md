@@ -1,8 +1,6 @@
 ﻿---
 title: Java日志框架 总结 slf4j、log4j、logback
 date: 2023-01-07 19:25:00
-top: true
-cover: true
 toc: true
 mathjax: false
 categories: 后端
@@ -11,7 +9,6 @@ tags:
   - Java
 ---
 
-@[TOC](目录)
 # Java日志技术
 
 ## 1.日志的概念
@@ -43,7 +40,7 @@ tags:
 - 1.面向接口编程,减少耦合 [通过导入不同的日志实现类,灵活切换框架,统一配置便于项目日志管理] 
 - 2.统一的API，并隐藏了不同框架的底部的细节,隐藏了日志实现框架 的API。方便学习及使用。
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-sxkplitf-1630495502298)(/Users/admin/Documents/my-note/image-old/image-20200405110730005.png)\]](https://i-blog.csdnimg.cn/blog_migrate/ffdcc208016c1335dd38c61e3de408ee.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-sxkplitf-1630495502298)(/Users/admin/Documents/my-note/image-old/image-20200405110730005.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184824_58ce5af4-b5eb-447b-8ee5-b5524eec433a.png)
 
 
 
@@ -216,7 +213,7 @@ log4j.appender.dbAppender.sql = INSERT INTO LOGGING (log_date, log_level, locati
     }
 ```
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/12c2d1462ad11b7366561dab71d82e54.png)
+![在这里插入图片描述](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184828_b3b73e21-d4a8-44fe-be10-6029b9e1e319.png)
 
 #### 底层的原理及自定义配置文件
 
@@ -377,17 +374,17 @@ java.util.logging.FileHandler.append=true
 
 > 早期叫Category,所以可以视为是Category类的别名
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/3d2db555bb5aab003ee4f2e1a79cf721.png)
+![在这里插入图片描述](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184830_d6570cbd-4f9a-4625-b602-e5cdf9bfef89.png)
 
 
 ##### 2). Appenders
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-d4FKTTiH-1630495502308)(/Users/admin/Documents/my-note/image-old/image-20200403092804928.png)\]](https://i-blog.csdnimg.cn/blog_migrate/16a5765528d3326532350a21b26ae3dd.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-d4FKTTiH-1630495502308)(/Users/admin/Documents/my-note/image-old/image-20200403092804928.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184833_4b0966a2-f5e1-483f-90de-36b65b291a26.png)
 
 
 ##### 3). Layouts
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-NuWbtfpo-1630495502310)(/Users/admin/Documents/my-note/image-old/image-20200403093159621.png)\]](https://i-blog.csdnimg.cn/blog_migrate/02a62fdeac5c03a6d19b680c86c59b04.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-NuWbtfpo-1630495502310)(/Users/admin/Documents/my-note/image-old/image-20200403093159621.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184837_22a62715-51e1-4cb0-bed0-f81b1e981c8c.png)
 
 
 #### 2. 源码分析
@@ -404,9 +401,9 @@ java.util.logging.FileHandler.append=true
 	
 ```
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-UCENH4ER-1630495502311)(/Users/admin/Documents/my-note/image-old/image-20200403115422584.png)\]](https://i-blog.csdnimg.cn/blog_migrate/49e20cfaaf1ffc113edaa811371a303a.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-UCENH4ER-1630495502311)(/Users/admin/Documents/my-note/image-old/image-20200403115422584.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184840_9bca110d-a9d8-4e67-b321-942b469bd712.png)
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/cc06a0480f86953765e9b517cc6f5b25.png)
+![在这里插入图片描述](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184843_b593bbbf-3545-4c7f-a6a5-dc96bd48100c.png)
 
 
 >  ==不知道配置文件写什么就在这查==。<<学习框架方法论>>
@@ -416,12 +413,12 @@ java.util.logging.FileHandler.append=true
 #### 3.其他
 
 ##### 3.1 Loglog: Log4j内置的日志的开关
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/16a9f64e327f284f101ef0ec5ec37bdc.png)
+![在这里插入图片描述](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184846_cc28390f-dd16-4c81-ac1f-74cb0128a71d.png)
 
 
 ##### 3.2 Layout的使用
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-uUPANV7w-1630495502319)(/Users/admin/Documents/my-note/image-old/image-20200404204902538.png)\]](https://i-blog.csdnimg.cn/blog_migrate/147289f2e33891e96fe0d6efc63228c2.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-uUPANV7w-1630495502319)(/Users/admin/Documents/my-note/image-old/image-20200404204902538.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184849_055bed73-b105-4af2-8db3-10caaa8cc394.png)
 
 
 通过ognl表达式来指定。
@@ -436,12 +433,12 @@ log4j.appender.console.layout.conversionPattern = [%p]%r %l %d{yyyy-mm-dd HH:mm:
 # %l == %c+%t+%F+%L
 ```
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/2ec10dd9f7b100ee1d0f564dd7f9bf2b.png)
+![在这里插入图片描述](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184851_62313913-ff17-4101-b0ae-1b8a3db61cf1.png)
 
 
 ##### 3.3 Appender的使用
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/9f702063b739d4ef771ace471fee6af0.png)
+![在这里插入图片描述](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184856_6fee5906-6525-4889-bfe3-d1c34e348015.png)
 
 
 - Console
@@ -453,7 +450,7 @@ log4j.appender.console.layout.conversionPattern = [%p]%r %l %d{yyyy-mm-dd HH:mm:
 
 > 需要指定一个输出文件
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-9LBENhsf-1630495502325)(/Users/admin/Documents/my-note/image-old/image-20200404210001421.png)\]](https://i-blog.csdnimg.cn/blog_migrate/a52b3671c9e17ac33130302672bf5b0d.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-9LBENhsf-1630495502325)(/Users/admin/Documents/my-note/image-old/image-20200404210001421.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184859_f4ed1354-a630-41fa-8db9-cdb2f4658f74.png)
 
 
 ```properties
@@ -519,19 +516,19 @@ log4j.logger.org.apache = error
 
 - 实验前 
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-Skg5yDys-1630495502326)(/Users/admin/Documents/my-note/image-old/image-20200405082951614.png)\]](https://i-blog.csdnimg.cn/blog_migrate/5e8f07d11e5b97f7c6a0398131f7ed46.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-Skg5yDys-1630495502326)(/Users/admin/Documents/my-note/image-old/image-20200405082951614.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184902_2f742aa8-5a6e-425c-aca9-cc95927c589b.png)
 
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-i55PYQ54-1630495502328)(/Users/admin/Documents/my-note/image-old/image-20200405083024130.png)\]](https://i-blog.csdnimg.cn/blog_migrate/3376842c0566e1dab643fe8056e030dd.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-i55PYQ54-1630495502328)(/Users/admin/Documents/my-note/image-old/image-20200405083024130.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184905_0087c89f-c297-4761-9edb-8c2303ea0752.png)
 
 
 > 没有打印123456
 
 - 实验后
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/445fd72464580d813b39ed3a09bcd130.png)
+![在这里插入图片描述](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184909_ef920014-30b2-4f56-bcdb-9bc43ccf93b7.png)
 
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-1ECKDThc-1630495502333)(/Users/admin/Documents/my-note/image-old/image-20200405082824218.png)\]](https://i-blog.csdnimg.cn/blog_migrate/abcc3304395246ca6700b3fbbf51e4c9.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-1ECKDThc-1630495502333)(/Users/admin/Documents/my-note/image-old/image-20200405082824218.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184912_c9f0bf2f-f7c9-4607-9573-5aaef731a19d.png)
 
 
 > 打印123456
@@ -546,7 +543,7 @@ log4j.logger.org.apache = error
 
 > 门面框架出现背景： 初期小项目用jul-> 后期用log4j 需要切换框架，麻烦 
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-wzt2g6Pq-1630495502378)(/Users/admin/Documents/my-note/image-old/image-20200405083911433.png)\]](https://i-blog.csdnimg.cn/blog_migrate/ab0d3e6bf9ef644c99398053b755f57e.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-wzt2g6Pq-1630495502378)(/Users/admin/Documents/my-note/image-old/image-20200405083911433.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184915_8de27000-0a7b-4a89-807b-d037c717ad01.png)
 
 
 ```java
@@ -559,23 +556,23 @@ log4j.logger.org.apache = error
 
 - 1.没有log4j依赖时，默认使用jul
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-G06jdQIr-1630495502382)(/Users/admin/Documents/my-note/image-old/image-20200405093515568.png)\]](https://i-blog.csdnimg.cn/blog_migrate/3293f90d587f9b5faa783b2ddc4997e2.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-G06jdQIr-1630495502382)(/Users/admin/Documents/my-note/image-old/image-20200405093515568.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184918_c7bae7bd-802b-4f92-ad72-df37f53a2e37.png)
 
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-syR2SHug-1630495502385)(/Users/admin/Documents/my-note/image-old/image-20200405093429447.png)\]](https://i-blog.csdnimg.cn/blog_migrate/2ae8fa3cab471fc09b37af632591965d.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-syR2SHug-1630495502385)(/Users/admin/Documents/my-note/image-old/image-20200405093429447.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184920_9fb2cb91-9dcd-4fef-8ed6-a1f48341af9d.png)
 
 
 - 有log4j依赖时，默认使用log4j
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-UEM2lObh-1630495502387)(/Users/admin/Documents/my-note/image-old/image-20200405093613785.png)\]](https://i-blog.csdnimg.cn/blog_migrate/cc1421e296b0da4b3e963267614e1953.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-UEM2lObh-1630495502387)(/Users/admin/Documents/my-note/image-old/image-20200405093613785.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184923_6c1580d7-38d0-49cf-ab7e-8d3457606501.png)
 
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-UbPFndTo-1630495502388)(/Users/admin/Documents/my-note/image-old/image-20200405093843684.png)\]](https://i-blog.csdnimg.cn/blog_migrate/195d27205f6ca70d2abbc1207fd61dd6.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-UbPFndTo-1630495502388)(/Users/admin/Documents/my-note/image-old/image-20200405093843684.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184926_058eb3c3-d836-4622-9075-dc14e4ef5074.png)
 
 
 #### 3.3.1 原理
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-JEiU0OLG-1630495502390)(/Users/admin/Documents/my-note/image-old/image-20200405102418149.png)\]](https://i-blog.csdnimg.cn/blog_migrate/b615dc47c4ac099016513f889922571c.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-JEiU0OLG-1630495502390)(/Users/admin/Documents/my-note/image-old/image-20200405102418149.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184929_abfa9633-1725-469c-a34d-14fc41f9ce08.png)
 
 
 ```java
@@ -639,7 +636,7 @@ slf4j意味着仅添加一个强制性依赖项，slf4j-api.jar。如果在类�
 ```
 
 #### 3.4.1 原理：
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/4c239587094bb261de0b55651e641450.png)
+![在这里插入图片描述](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184932_261e3335-28bf-4fab-b325-4a314e7a6fa3.png)
 
 
 ```java
@@ -653,15 +650,15 @@ slf4j意味着仅添加一个强制性依赖项，slf4j-api.jar。如果在类�
 
 #### 3.4.2 日志桥接技术
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-UngUJ6DV-1630495502394)(/Users/admin/Documents/my-note/image-old/image-20200405232257770.png)\]](https://i-blog.csdnimg.cn/blog_migrate/0164b7232b6d79cb92ce3f46023f536f.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-UngUJ6DV-1630495502394)(/Users/admin/Documents/my-note/image-old/image-20200405232257770.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184935_25649de2-1be3-489e-985f-210772947100.png)
 
 
 #### 3.4.3 [桥接技术]死循环的原因 [桥接不能和适配器同时出现(jar包)]
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-ekVHT1OV-1630495502395)(/Users/admin/Documents/my-note/image-old/image-20200405231826182.png)\]](https://i-blog.csdnimg.cn/blog_migrate/8cab1d572451f7dce6eb32e7002ff7dd.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-ekVHT1OV-1630495502395)(/Users/admin/Documents/my-note/image-old/image-20200405231826182.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184938_fe8a32c1-437e-4c91-8223-e7dbeac982aa.png)
 
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-1W5SHKTY-1630495502398)(/Users/admin/Documents/my-note/image-old/image-20200405232029754.png)\]](https://i-blog.csdnimg.cn/blog_migrate/d3fd795439070d7dd97936d6f8af947b.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-1W5SHKTY-1630495502398)(/Users/admin/Documents/my-note/image-old/image-20200405232029754.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184941_53ad72ec-76d5-447d-a5f0-a75c45372422.png)
 
 
 ### 3.5 logback[实现框架]
@@ -670,10 +667,10 @@ https://www.cnblogs.com/gavincoder/p/10091757.html
 
 #### 3.5.0 基础代码
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-8IOlcpJl-1630495502399)(/Users/admin/Documents/my-note/image-old/image-20200406071803831.png)\]](https://i-blog.csdnimg.cn/blog_migrate/4847baa5c4bdf916cfb6f2d59236a725.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-8IOlcpJl-1630495502399)(/Users/admin/Documents/my-note/image-old/image-20200406071803831.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184944_c55759a6-0f7d-41ff-8691-70a634c59189.png)
 
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-cjObYrM4-1630495502401)(/Users/admin/Documents/my-note/image-old/image-20200406071937720.png)\]](https://i-blog.csdnimg.cn/blog_migrate/cf3a606ef8afafc609be2fa84b144791.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-cjObYrM4-1630495502401)(/Users/admin/Documents/my-note/image-old/image-20200406071937720.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184947_77de8ad6-a006-4e86-b121-14d50d030eeb.png)
 
 
 依赖关系
@@ -780,13 +777,13 @@ https://www.cnblogs.com/gavincoder/p/10091757.html
 ```
 
 #### 3.5.3 log4j格式转logback [ pattern变了 ]
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/e0a8282a8bcbdddae6ebc829ec675c6e.png)
+![在这里插入图片描述](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184950_6ac26599-8bec-4e4d-becd-9f47a7a1fd67.png)
 
 
 #### 3.5.4 logback-access使用
 
 > 使用这个来替换tomcat或jetty的日志
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/33e5fa9e5e78efe30f118b8005c0c178.png)
+![在这里插入图片描述](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184953_47858b67-cee0-4e0f-a488-eaaad19ab99b.png)
 
 
 ### 3.6 log4j2[实现框架]
@@ -874,7 +871,7 @@ https://www.cnblogs.com/gavincoder/p/10091757.html
 
 #### 2. log4j2异步日志原理
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-iTd2Op1i-1630495502409)(/Users/admin/Documents/my-note/image-old/image-20200414122159052.png)\]](https://i-blog.csdnimg.cn/blog_migrate/912a18c7bf66b972a2e4cf5e7899d557.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-iTd2Op1i-1630495502409)(/Users/admin/Documents/my-note/image-old/image-20200414122159052.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184957_ba5c627c-81a9-49dc-8ded-3ceb775e4a8d.png)
 
 
 两种方式
@@ -891,7 +888,7 @@ https://www.cnblogs.com/gavincoder/p/10091757.html
         </dependency>
 ```
 
-![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-zjEX5Jc3-1630495502415)(/Users/admin/Documents/my-note/image-old/image-20200414123002440.png)\]](https://i-blog.csdnimg.cn/blog_migrate/e7de474eb147917f80492f15f3a5a921.png)
+![\[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-zjEX5Jc3-1630495502415)(/Users/admin/Documents/my-note/image-old/image-20200414123002440.png)\]](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101185001_fe5cc76d-7ad9-4a64-ae32-62bdc856f8ed.png)
 
 ### 3.7 SpringBoot中的应用
 
@@ -970,19 +967,19 @@ public static final Logger LOGGER = LoggerFactory.getLogger(Slf4jTest.class);
 #### slf4j的各种依赖关系[ 比较重要就再说一遍 ]
 
 ##### 1. slf4j-jdk
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/0829d39cb8294db8d13df0cec8f1c391.png)
+![在这里插入图片描述](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101185004_af7f7277-0acd-4bc4-82d7-3cd46f4e9a28.png)
 
 
 
 ##### 2.  slf4j-log4j
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/1c92915fb2e6dc2fa5d90cdd9b4370e1.png)
+![在这里插入图片描述](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101185008_06057faa-3c20-4918-90a5-90891b5970bb.png)
 
 
 
 ##### 3. slf4j-logback
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/452b41c1291929807a949985d517d66f.png)
+![在这里插入图片描述](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101185011_58c23e1e-3781-4095-bf5b-f57eda80fe01.png)
 #### 4.slf4j-log4j2
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/ec8f94cf7224eb550266b2a0d9e6c845.png)
+![在这里插入图片描述](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101185015_8638e825-4d47-420d-b5a4-b6202dd0ae83.png)
 
 
 

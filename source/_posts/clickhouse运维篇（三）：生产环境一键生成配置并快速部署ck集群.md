@@ -12,14 +12,14 @@ tags:
 ---   
 
 
-![请添加图片描述](https://i-blog.csdnimg.cn/direct/7677be0676904a7687c2f4cc8aef0a46.png)
+![请添加图片描述](https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184811_fcf9cfcc-6fa3-468f-9355-8d671d6e165d.png)
 
 > 前提条件：先了解集群搭建流程是什么样，需要改哪些配置，有哪些环境，这个文章目的是简化部署。 
 
 [clickhouse运维篇（一）：docker-compose 快速部署clickhouse集群](https://blog.csdn.net/qq_42873554/article/details/142646374)
 [clickhouse运维篇（二）：多机器手动部署ck集群](https://blog.csdn.net/qq_42873554/article/details/143368665?sharetype=blogdetail&sharerId=143368665&sharerefer=PC&sharesource=qq_42873554&spm=1011.2480.3001.8118)
 
-!https://i-blog.csdnimg.cn/direct/7677be0676904a7687c2f4cc8aef0a46.png
+!https://raw.githubusercontent.com/Bit-urd/image-cloud/refs/heads/master/image-gp/20241101184811_fcf9cfcc-6fa3-468f-9355-8d671d6e165d.png
 
 # 项目目录解析：
 

@@ -43,19 +43,21 @@ render_drafts: false
 post_asset_folder: false
 relative_link: false
 future: true
-syntax_highlighter: highlight.js
+syntax_highlighter: prismjs
 highlight:
-  line_number: false
-  auto_detect: false
-  tab_replace: ''
-  wrap: true
-  hljs: false
-  enable: false
+  enable: false # 关闭 highlight
 prismjs:
-  mode: 'preprocess'    # realtime/preprocess
-  theme: 'tomorrow'
-  line_number: false    # default false
-  custom_css:
+  enable: true # 启用 prismjs
+  preprocess: true # Hexo 内建的 PrismJS 支持浏览器端高亮（preprocess 设置为 false）和服务器端高亮（preprocess 设置为 true）两种方式
+  line_number: true # 是否显示行号
+  line_threshold: 0 # 接受一个可选的阈值，只要代码块的行数超过这个阈值，就只显示行号。 默认值为 0。
+  tab_replace: '' # 用代码内的 tab (\t) 替换为给定值，默认值是两个空格。
+prism_plugin:
+  enable: true		  # 插件是否开启
+  theme: 'tomorrow' # 插件主题
+  preprocess: true  # 预加载功能是否开启
+  line_number: true # 行号是否开启
+  tab_replace: ''
 
 # Home page setting
 # path: Root path for your blogs index page. (default = '')
