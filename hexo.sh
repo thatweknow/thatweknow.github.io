@@ -51,6 +51,10 @@ rm -rf data/blog/*
 
 if [ "$param" == "d" ]; then
     hexo clean && hexo g && hexo d
+    if [ $? -ne 0 ]; then
+        echo "【ERROR:】 hexo d failed"
+        exit 1
+    fi
 else
     hexo clean && hexo g && hexo s
     exit
