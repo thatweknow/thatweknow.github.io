@@ -63,13 +63,10 @@ git push
 # sh start.sh s /Users/admin/my-project/biturd-gp/source/_posts
 # sh start.sh d /Users/admin/my-project/biturd-gp/source/_posts
 
+# 2. 刷新 CDN 缓存
+echo "正在刷新 CDN 缓存..."
 
-# # 2. 刷新 CDN 缓存
-#echo "正在刷新 CDN 缓存..."
+python3 clear_cdn.py
 
-#curl -X POST \
-#  -H "Authorization: Bearer <your_access_token>" \
-#  -d '{"ObjectPath": "https://yourdomain.com/path/to/your/file", "ObjectType": "File"}' \
-#  "https://cdn.aliyun.com/api/refresh"
+echo "已刷新: https://www.biturd.com/ 目录"
 
-#echo "CDN 缓存已刷新"
