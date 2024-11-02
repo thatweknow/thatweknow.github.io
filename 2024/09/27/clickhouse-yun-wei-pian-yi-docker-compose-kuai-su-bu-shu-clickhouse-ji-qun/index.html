@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="baidu-site-verification" content="codeva-0xuY7Umt43" />
     <meta name="google-site-verification" content="Q9UKTUVE--Yum6Qq3bU3_aBVua6Guo7Gqv15zC8NjN8" />    
-    <meta name="keywords" content="clickhouse运维篇（一）：docker-compose 快速部署clickhouse集群., biturd">
+    <meta name="keywords" content="clickhouse运维篇（一）：docker-compose 快速部署clickhouse集群., 专注Java、Golang后端知识分享, 分享技术、生活、读书、随笔等内容。欢迎关注！">
     <meta name="description" content="前提条件注意事项：
 
 镜像版本号注意保持一致   [zookeeper:3.7,   clickhouse&amp;#x2F;clickhouse-server:22.5.4]
@@ -382,6 +382,16 @@ config里面的参数有些是必须的，日志报错缺少参数去官方文�
                 
 
                 
+
+
+                
+                    <div class="info-break-policy">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        注意事项:&nbsp;&nbsp;
+                        图床为github, 如果图片资源加载失败请配置github加速或尝试科学上网
+                    </div>
+                
+
 
                 
 
@@ -992,6 +1002,43 @@ http &#123;
 
 </div>
 
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE' || selection.getRangeAt(0).commonAncestorContainer.nodeName === 'CODE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: biturd<br />'
+            + '文章作者: biturd<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
 
 
 <!-- 代码块功能依赖 -->
