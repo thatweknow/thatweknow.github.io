@@ -1,6 +1,6 @@
 if ! [ -n "$1" ]; then
     echo "Usage: sh hexo.sh [a|c|s|d] [option[a|s|d]:src_dir/src_file]"
-    exit
+    exit 1
 fi
 cur_dir=$(pwd)
 
@@ -16,11 +16,11 @@ if [ $param == "a" ]; then
     if [ -d $file_name ]; then
         cp -R $file_name/* data/blog/
         echo "【INFO:】 move $file_name folder to md cache folder"
-        exit
+        exit 1
     else
         cp $cur_dir/$file_name data/blog/
         echo "【INFO:】 move $file_name file to md cache folder"
-        exit    
+        exit 1   
     fi
 fi
 
@@ -62,3 +62,14 @@ git push
 
 # sh start.sh s /Users/admin/my-project/biturd-gp/source/_posts
 # sh start.sh d /Users/admin/my-project/biturd-gp/source/_posts
+
+
+# # 2. 刷新 CDN 缓存
+#echo "正在刷新 CDN 缓存..."
+
+#curl -X POST \
+#  -H "Authorization: Bearer <your_access_token>" \
+#  -d '{"ObjectPath": "https://yourdomain.com/path/to/your/file", "ObjectType": "File"}' \
+#  "https://cdn.aliyun.com/api/refresh"
+
+#echo "CDN 缓存已刷新"

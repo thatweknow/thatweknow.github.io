@@ -47,12 +47,22 @@
                 </div>
                 <% } %>
 
-                <% if (theme.postInfo.wordCount) { %>
-                <div class="info-break-policy">
-                    <i class="far fa-file-word fa-fw"></i><%- __('wordCount') %>:&nbsp;&nbsp;
-                    <%= wordcount(page.content) %>
+                <% if (theme.postInfo.update) { %>
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i><%- __('updateDate') %>:&nbsp;&nbsp;
+                    <%- date(page.updated, 'YYYY-MM-DD') %>
                 </div>
                 <% } %>
+
+
+                <% if (theme.postInfo.attention) { %>
+                    <div class="info-break-policy">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <%- __('attentionNotice') %>:&nbsp;&nbsp;
+                        <%= theme.postInfo.attention %>
+                    </div>
+                <% } %>
+
 
                 <% if (theme.postInfo.min2read) { %>
                 <div class="info-break-policy">

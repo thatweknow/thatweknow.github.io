@@ -198,7 +198,7 @@ reward:
 # minCharNumber: Approve copyright information by copying at least how many characters.
 # 是否激活复制文章时追加博客和作者的版权信息.
 copyright:
-  enable: false
+  enable: true
   minCharNumber: 120 # 至少复制多少个字符就追加版权信息.
   description: 本文章著作权归作者所有，任何形式的转载都请注明出处。
 
@@ -223,7 +223,7 @@ postInfo:
   totalCount: false # 站点总文章字数
   min2read: false # 文章阅读时长
   readCount: false # 文章阅读次数
-
+  attention: 图床为github, 如果图片资源加载失败请配置github加速或尝试科学上网 # 文章摘要
 # Whether to activate the 'love' effect of clicking on the page.
 # 是否激活点击页面的'爱心'效果，默认激活.
 clicklove:

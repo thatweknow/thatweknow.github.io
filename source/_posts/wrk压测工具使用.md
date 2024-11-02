@@ -3,6 +3,7 @@ title: wrk压测工具使用
 date: 2022-09-07 09:25:00
 toc: true
 mathjax: false
+author: biturd
 categories: 性能优化
 tags:
   - 压测
