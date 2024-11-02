@@ -69,9 +69,11 @@ git push
 # sh start.sh d /Users/admin/my-project/biturd-gp/source/_posts
 
 # 2. 刷新 CDN 缓存
-echo "正在刷新 CDN 缓存..."
+echo "十分钟后刷新 CDN 缓存..."
 
-python3 clear_cdn.py
+# Schedule the clear_cdn.py script to run in 10 minutes
+echo "python3 $cur_dir/clear_cdn.py && echo '已刷新: https://www.biturd.com/ 目录'" | at now + 10 minutes
+# 十五分钟之后删除上面这个
 
 echo "已刷新: https://www.biturd.com/ 目录"
 

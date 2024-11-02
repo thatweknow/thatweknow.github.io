@@ -1,5 +1,5 @@
 ---
-title: K8s开发相关 6343ef0392914c3681ce1b42cde1eb95
+title: K8s开发需要掌握的知识
 date: 2024-11-02 17:12:48
 top: false
 cover: false
