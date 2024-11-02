@@ -7,18 +7,19 @@ cur_dir=$(pwd)
 cd /Users/admin/my-project/biturd-gp/
 param=$1
 
-if [ $param == "a" ]; then
+if [ "$param" == "a" ]; then
     file_name=$2
-    if [ $file_name == '.' ]; then
+    file_name=${file_name//\\/}
+    if [ "$file_name" == '.' ]; then
         file_name=$cur_dir
     fi
 
-    if [ -d $file_name ]; then
-        cp -R $file_name/* data/blog/
+    if [ -d "$file_name" ]; then
+        cp -R "$file_name/*" data/blog/
         echo "【INFO:】 move $file_name folder to md cache folder"
         exit 1
     else
-        cp $cur_dir/$file_name data/blog/
+        cp "$cur_dir/$file_name" "data/blog/"
         echo "【INFO:】 move $file_name file to md cache folder"
         exit 1   
     fi
